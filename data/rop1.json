@@ -1,0 +1,66 @@
+[
+    {
+        "value": "A003",
+        "label": "Eurasian Peoples"
+    },
+    {
+        "value": "A008",
+        "label": "Malay Peoples"
+    },
+    {
+        "value": "A014",
+        "label": "Tibetan \/ Himalayan Peoples"
+    },
+    {
+        "value": "A017",
+        "label": "Deaf Peoples"
+    },
+    {
+        "value": "A013",
+        "label": "Sub-Saharan African"
+    },
+    {
+        "value": "A002",
+        "label": "East Asian Peoples"
+    },
+    {
+        "value": "A011",
+        "label": "Southeast Asian Peoples"
+    },
+    {
+        "value": "A005",
+        "label": "Persian-Median"
+    },
+    {
+        "value": "A001",
+        "label": "Arab World"
+    },
+    {
+        "value": "A012",
+        "label": "South Asian Peoples"
+    },
+    {
+        "value": "A010",
+        "label": "Pacific Islanders"
+    },
+    {
+        "value": "A006",
+        "label": "Jewish Peoples"
+    },
+    {
+        "value": "A004",
+        "label": "Horn of Africa"
+    },
+    {
+        "value": "A015",
+        "label": "Turkic Peoples"
+    },
+    {
+        "value": "A007",
+        "label": "Latin-Caribbean Americans"
+    },
+    {
+        "value": "A009",
+        "label": "North American Peoples"
+    }
+]

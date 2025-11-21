@@ -1,0 +1,138 @@
+[
+    {
+        "value": "CRC",
+        "label": "Roman Catholicism"
+    },
+    {
+        "value": "MSN",
+        "label": "Sunni Islam"
+    },
+    {
+        "value": "BTH",
+        "label": "Theravada Buddhism"
+    },
+    {
+        "value": "ECF",
+        "label": "Chinese Folk Religion"
+    },
+    {
+        "value": "CNP",
+        "label": "Neo-Pentecostalism"
+    },
+    {
+        "value": "CPR",
+        "label": "Protestantism"
+    },
+    {
+        "value": "BOF",
+        "label": "Folk Buddhism"
+    },
+    {
+        "value": "EAF",
+        "label": "African Traditional Religion"
+    },
+    {
+        "value": "BMA",
+        "label": "Mahayana Buddhism"
+    },
+    {
+        "value": "HOF",
+        "label": "Folk Hinduism"
+    },
+    {
+        "value": "COR",
+        "label": "Eastern Orthodoxy"
+    },
+    {
+        "value": "MOF",
+        "label": "Folk Islam"
+    },
+    {
+        "value": "CFC",
+        "label": "Folk Catholicism"
+    },
+    {
+        "value": "NAT",
+        "label": "Atheism"
+    },
+    {
+        "value": "OJA",
+        "label": "Jainism"
+    },
+    {
+        "value": "EAN",
+        "label": "Animism"
+    },
+    {
+        "value": "MSH",
+        "label": "Shia Islam"
+    },
+    {
+        "value": "EPO",
+        "label": "Polytheism"
+    },
+    {
+        "value": "BLA",
+        "label": "Tibetan Buddhism"
+    },
+    {
+        "value": "EJF",
+        "label": "Shinbutsu-Shugo"
+    },
+    {
+        "value": "OZR",
+        "label": "Zoroastrianism"
+    },
+    {
+        "value": "MIS",
+        "label": "Shia Imami Ismaili Islam"
+    },
+    {
+        "value": "EAW",
+        "label": "Ancestor Worship"
+    },
+    {
+        "value": "OKI",
+        "label": "Kirati"
+    },
+    {
+        "value": "ODZ",
+        "label": "Druze"
+    },
+    {
+        "value": "NSE",
+        "label": "Secularism"
+    },
+    {
+        "value": "NAG",
+        "label": "Agnosticism"
+    },
+    {
+        "value": "ENA",
+        "label": "Native American religions"
+    },
+    {
+        "value": "ESM",
+        "label": "Shamanism"
+    },
+    {
+        "value": "ECO",
+        "label": "Confucianism"
+    },
+    {
+        "value": "EDA",
+        "label": "Daoism"
+    },
+    {
+        "value": "ESA",
+        "label": "Samaritanism"
+    },
+    {
+        "value": "OMA",
+        "label": "Mandaeism"
+    },
+    {
+        "value": "OBH",
+        "label": "Baha'i"
+    }
+]
