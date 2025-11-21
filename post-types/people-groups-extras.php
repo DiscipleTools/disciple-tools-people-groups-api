@@ -60,6 +60,19 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
+            $isoalpha3_default = $this->get_default_values( 'isoalpha3', include_value: true, sort_fn: function( $a, $b ) {
+                return strcmp( $a['label'], $b['label'] );
+            } );
+            $fields['imb_isoalpha3'] = [
+                'name' => __( 'IMB - ISO Alpha 3', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The ISO Alpha 3 code for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $isoalpha3_default,
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
             $affcd_default = $this->get_default_values( 'affcd', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
@@ -105,6 +118,159 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
+            $fields['imb_pop'] = [
+                'name' => __( 'IMB - Population', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The population for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_pop_cls'] = [
+                'name' => __( 'IMB - Population Class', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The population class for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => [
+                    '0' => [
+                        'label' => __( 'Less than 10,000', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '1' => [
+                        'label' => __( '100,000 - 249,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '2' => [
+                        'label' => __( '25,000 - 49,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '3' => [
+                        'label' => __( '250,000 - 499,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '4' => [
+                        'label' => __( '10,000 - 24,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '5' => [
+                        'label' => __( '500,000 - 999,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '6' => [
+                        'label' => __( '50,000 - 99,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '7' => [
+                        'label' => __( '1,000,00 - 2,499,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '8' => [
+                        'label' => __( '5,000,000 - 9,999,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '9' => [
+                        'label' => __( '2,500,000 - 4,999,999', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '10' => [
+                        'label' => __( '10,000,000+', 'disciple-tools-people-groups-api' ),
+                    ],
+                ],
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_evngpct'] = [
+                'name' => __( 'IMB - Evangelical Percentage', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The evangelical percentage for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_evnglvl'] = [
+                'name' => __( 'IMB - Evangelical Level', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The evangelical level for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => [
+                    '0' => [
+                        'label' => __( 'No Known Evangelicals', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '1' => [
+                        'label' => __( 'Less than 2%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '2' => [
+                        'label' => __( '2% or Greater but Less than 5%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '3' => [
+                        'label' => __( '5% or Greater but Less than 10%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '4' => [
+                        'label' => __( '10% or Greater but Less than 15%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '5' => [
+                        'label' => __( '15% or Greater but Less than 20%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '6' => [
+                        'label' => __( '20% or Greater but Less than 30%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '7' => [
+                        'label' => __( '30% or Greater but Less than 40%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '8' => [
+                        'label' => __( '40% or Greater but Less than 50%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '9' => [
+                        'label' => __( '50% or Greater but Less than 75%', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '10' => [
+                        'label' => __( '75% or Greater', 'disciple-tools-people-groups-api' ),
+                    ],
+                ],
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
+            $fields['imb_congexst'] = [
+                'name' => __( 'IMB - Congregation Existence', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The existence of a congregation within the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => [
+                    '0' => [
+                        'label' => __( 'No', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '1' => [
+                        'label' => __( 'Yes', 'disciple-tools-people-groups-api' ),
+                    ],
+                ],
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_plnting'] = [
+                'name' => __( 'IMB - Planting Status', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The planting status for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => [
+                    '0' => [
+                        'label' => __( 'No churches planted', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '1' => [
+                        'label' => __( 'Dispersed church planting', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '2' => [
+                        'label' => __( 'Concentrated church planting', 'disciple-tools-people-groups-api' ),
+                    ],
+                ],
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
+            if ( !$debug ) {
+                $rol_default = $this->get_default_values( 'rol', include_value: true, sort_fn: function( $a, $b ) {
+                    return strcmp( $a['label'], $b['label'] );
+                } );
+                $fields['imb_rol'] = [
+                    'name' => __( 'IMB - Language', 'disciple-tools-people-groups-api' ),
+                    'description' => __( 'The language for the people group', 'disciple-tools-people-groups-api' ),
+                    'type' => 'key_select',
+                    'default' => $rol_default,
+                    'post_type' => $this->post_type,
+                    'tile' => 'people_groups',
+                    'show_in_table' => 35,
+                ];
+            }
 
             $gsec_default = $this->get_default_values( 'gsec', include_value: true, sort_fn: function( $a, $b ) {
                 return (int) $a['value'] - (int) $b['value'];
@@ -114,6 +280,23 @@ class Disciple_Tools_People_Groups_Extras {
                 'description' => __( 'The GSEC for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => $gsec_default,
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
+            $fields['imb_engstat'] = [
+                'name' => __( 'IMB - Engagement Status', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The engagement status for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => [
+                    'engaged' => [
+                        'label' => __( 'Engaged', 'disciple-tools-people-groups-api' ),
+                    ],
+                    'unengaged' => [
+                        'label' => __( 'Unengaged', 'disciple-tools-people-groups-api' ),
+                    ],
+                ],
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,

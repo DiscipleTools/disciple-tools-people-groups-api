@@ -11,4 +11,11 @@ php csv-to-json.php ROR4 RlgnDiv ror4.json
 
 php csv-to-json.php AffCd Aff affcd.json
 php csv-to-json.php ROG Ctry rog.json
+php csv-to-json.php ISOalpha3 Ctry isoalpha3.json
 php csv-to-json.php GSEC GSECbrf GSEClng gsec.json
+
+php csv-to-json.php Regn regn.json
+php csv-to-json.php RegnSub regnsub.json
+php csv-to-json.php EngStat engstat.json
+
+php csv-to-json.php ROL Lang rol.json
