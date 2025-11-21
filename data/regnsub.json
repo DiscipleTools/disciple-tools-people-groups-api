@@ -1,0 +1,90 @@
+[
+    {
+        "value": "southern_europe",
+        "label": "Southern Europe"
+    },
+    {
+        "value": "eastern_asia",
+        "label": "Eastern Asia"
+    },
+    {
+        "value": "eastern_africa",
+        "label": "Eastern Africa"
+    },
+    {
+        "value": "northern_america",
+        "label": "Northern America"
+    },
+    {
+        "value": "western_europe",
+        "label": "Western Europe"
+    },
+    {
+        "value": "northern_africa",
+        "label": "Northern Africa"
+    },
+    {
+        "value": "south_america",
+        "label": "South America"
+    },
+    {
+        "value": "southern_africa",
+        "label": "Southern Africa"
+    },
+    {
+        "value": "western_africa",
+        "label": "Western Africa"
+    },
+    {
+        "value": "south-eastern_asia",
+        "label": "South-Eastern Asia"
+    },
+    {
+        "value": "southern_asia",
+        "label": "Southern Asia"
+    },
+    {
+        "value": "western_asia",
+        "label": "Western Asia"
+    },
+    {
+        "value": "eastern_europe",
+        "label": "Eastern Europe"
+    },
+    {
+        "value": "northern_europe",
+        "label": "Northern Europe"
+    },
+    {
+        "value": "central_asia",
+        "label": "Central Asia"
+    },
+    {
+        "value": "caribbean",
+        "label": "Caribbean"
+    },
+    {
+        "value": "central_america",
+        "label": "Central America"
+    },
+    {
+        "value": "middle_africa",
+        "label": "Middle Africa"
+    },
+    {
+        "value": "australia_and_new_zealand",
+        "label": "Australia and New Zealand"
+    },
+    {
+        "value": "melanesia",
+        "label": "Melanesia"
+    },
+    {
+        "value": "polynesia",
+        "label": "Polynesia"
+    },
+    {
+        "value": "micronesia",
+        "label": "Micronesia"
+    }
+]

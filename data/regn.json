@@ -1,0 +1,22 @@
+[
+    {
+        "value": "europe",
+        "label": "Europe"
+    },
+    {
+        "value": "asia",
+        "label": "Asia"
+    },
+    {
+        "value": "africa",
+        "label": "Africa"
+    },
+    {
+        "value": "americas",
+        "label": "Americas"
+    },
+    {
+        "value": "oceania",
+        "label": "Oceania"
+    }
+]

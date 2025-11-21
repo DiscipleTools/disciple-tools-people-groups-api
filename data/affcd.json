@@ -1,0 +1,34 @@
+[
+    {
+        "value": "AG100",
+        "label": "European Peoples"
+    },
+    {
+        "value": "AG650",
+        "label": "Asian Pacific Rim Peoples"
+    },
+    {
+        "value": "AG900",
+        "label": "Deaf Peoples"
+    },
+    {
+        "value": "AG300",
+        "label": "Sub-Saharan African Peoples"
+    },
+    {
+        "value": "AG400",
+        "label": "Central Asian Peoples"
+    },
+    {
+        "value": "AG200",
+        "label": "Northern African and Middle Eastern Peoples"
+    },
+    {
+        "value": "AG500",
+        "label": "South Asian Peoples"
+    },
+    {
+        "value": "AG800",
+        "label": "American Peoples"
+    }
+]
