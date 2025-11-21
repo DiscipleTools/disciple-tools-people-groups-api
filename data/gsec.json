@@ -1,0 +1,32 @@
+[
+    {
+        "value": "4",
+        "label": "2% or Greater but Less than 5% Evangelical",
+        "description": "this people group is greater than or equal to 2% evangelical"
+    },
+    {
+        "value": "6",
+        "label": "10% or Greater Evangelical",
+        "description": "this people group is greater than or equal to 10% evangelical"
+    },
+    {
+        "value": "1",
+        "label": "Less than 2% Evangelical, No Active CP Activity",
+        "description": "this people group is less than 2% evangelical, some evangelical resources are available, but there has been no active church planting among them within the past two years"
+    },
+    {
+        "value": "5",
+        "label": "5% or Greater but Less than 10% Evangelical",
+        "description": "this people group is greater than or equal to 5% evangelical"
+    },
+    {
+        "value": "2",
+        "label": "Less than 2% Evangelical, Concentrated CP Activity",
+        "description": "this people group is less than 2% evangelical but there has been initial or concentrated church planting among them within the past two years"
+    },
+    {
+        "value": "3",
+        "label": "Less than 2% Evangelical, Dispersed CP Activity",
+        "description": "this people group is less than 2% evangelical but there has been dispersed church planting among them within the past two years"
+    }
+]

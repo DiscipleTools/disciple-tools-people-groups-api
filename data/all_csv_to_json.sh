@@ -11,3 +11,4 @@ php csv-to-json.php ROR4 RlgnDiv ror4.json
 
 php csv-to-json.php AffCd Aff affcd.json
 php csv-to-json.php ROG Ctry rog.json
+php csv-to-json.php GSEC GSECbrf GSEClng gsec.json

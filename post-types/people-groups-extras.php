@@ -73,6 +73,52 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
+            $fields['imb_name'] = [
+                'name' => __( 'IMB - People Name', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The name for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_name_display'] = [
+                'name' => __( 'IMB - Display Name', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The display name for the people group for using in the UI', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_name_alt'] = [
+                'name' => __( 'IMB - Alternate Name', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The alternate name for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_location_desc'] = [
+                'name' => __( 'IMB - Location Description', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The location description of where the people live', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
+            $gsec_default = $this->get_default_values( 'gsec', include_value: true, sort_fn: function( $a, $b ) {
+                return (int) $a['value'] - (int) $b['value'];
+            } );
+            $fields['imb_gsec'] = [
+                'name' => __( 'IMB - GSEC', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The GSEC for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $gsec_default,
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
             $rop1_default = $this->get_default_values( 'rop1', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
