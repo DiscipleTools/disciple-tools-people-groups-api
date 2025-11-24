@@ -1,0 +1,22 @@
+[
+    {
+        "value": "0",
+        "label": "Bible"
+    },
+    {
+        "value": "1",
+        "label": "New Testament"
+    },
+    {
+        "value": "2",
+        "label": "None"
+    },
+    {
+        "value": "3",
+        "label": "Selections"
+    },
+    {
+        "value": "4",
+        "label": "Stories"
+    }
+]

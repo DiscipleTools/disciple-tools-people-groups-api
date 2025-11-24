@@ -1,23 +1,46 @@
 <?php
 /**
- * Script to convert CSV columns to JSON format
+ * Script to convert CSV columns to JSON or PHP array format
  *
- * Usage: php csv_to_json.php <column1> [column2] [column3] [output_file]
+ * Usage: php csv_to_json.php <column1> [column2] [column3] [output_file] [--use-numeric-value]
  *
  * Example: php csv_to_json.php Name
  * Example: php csv_to_json.php Name PGID PeopleDesc
  * Example: php csv_to_json.php Name PGID output.json
+ * Example: php csv_to_json.php Name PGID output.php
+ * Example: php csv_to_json.php Name output.php --use-numeric-value
  */
 
 function esc_html( $string ) {
     return $string;
 }
 
+/**
+ * Format PHP array for output
+ *
+ * @param array $data The data to format.
+ * @return string Formatted PHP array code.
+ */
+function format_php_array( $data ) {
+    $output = var_export( $data, true );
+
+    // Fix formatting: remove space between 'array' and '('
+    $output = str_replace( 'array (', 'array(', $output );
+
+    // Fix formatting: remove newline after '=>' when followed by 'array('
+    // Pattern: "=>\n  array(" becomes "=> array("
+    $output = preg_replace( '/=>\s*\n\s*array\(/', '=> array(', $output );
+
+    return $output;
+}
+
 if ( $argc < 2 ) {
-    echo 'Usage: php csv_to_json.php <column1> [column2] [column3] [output_file]' . "\n";
+    echo 'Usage: php csv_to_json.php <column1> [column2] [column3] [output_file] [--use-numeric-value]' . "\n";
     echo 'Example: php csv_to_json.php Name' . "\n";
     echo 'Example: php csv_to_json.php Name PGID PeopleDesc' . "\n";
     echo 'Example: php csv_to_json.php Name PGID output.json' . "\n";
+    echo 'Example: php csv_to_json.php Name PGID output.php' . "\n";
+    echo 'Example: php csv_to_json.php Name output.php --use-numeric-value' . "\n";
     exit( 1 );
 }
 
@@ -27,30 +50,38 @@ if ( ! file_exists( $csv_file ) ) {
     exit( 1 );
 }
 
-// Get column names from arguments
-$column1 = $argv[1];
-$column2 = isset( $argv[2] ) && ! empty( $argv[2] ) && ! preg_match( '/\.json$/', $argv[2] ) ? $argv[2] : null;
+// Check for --use-numeric-value flag
+$use_numeric_value = in_array( '--use-numeric-value', $argv, true );
+
+// Get column names from arguments (excluding the flag)
+$filtered_args = array_filter( $argv, function( $arg ) {
+    return $arg !== '--use-numeric-value';
+} );
+$filtered_args = array_values( $filtered_args ); // Re-index array
+
+$column1 = isset( $filtered_args[1] ) ? $filtered_args[1] : null;
+$column2 = isset( $filtered_args[2] ) && ! empty( $filtered_args[2] ) && ! preg_match( '/\.(json|php)$/', $filtered_args[2] ) ? $filtered_args[2] : null;
 $column3 = null;
 $output_file = null;
 
 // Determine if we have 2 or 3 columns, or if last arg is output file
 if ( $column2 ) {
-    // Check if argv[3] is column3 or output file
-    if ( isset( $argv[3] ) && ! empty( $argv[3] ) ) {
-        if ( preg_match( '/\.json$/', $argv[3] ) ) {
-            $output_file = $argv[3];
+    // Check if filtered_args[3] is column3 or output file
+    if ( isset( $filtered_args[3] ) && ! empty( $filtered_args[3] ) ) {
+        if ( preg_match( '/\.(json|php)$/', $filtered_args[3] ) ) {
+            $output_file = $filtered_args[3];
         } else {
-            $column3 = $argv[3];
-            // Check if argv[4] is output file
-            if ( isset( $argv[4] ) ) {
-                $output_file = $argv[4];
+            $column3 = $filtered_args[3];
+            // Check if filtered_args[4] is output file
+            if ( isset( $filtered_args[4] ) ) {
+                $output_file = $filtered_args[4];
             }
         }
     }
 } else {
-    // Only one column, check if argv[2] is output file
-    if ( isset( $argv[2] ) && preg_match( '/\.json$/', $argv[2] ) ) {
-        $output_file = $argv[2];
+    // Only one column, check if filtered_args[2] is output file
+    if ( isset( $filtered_args[2] ) && preg_match( '/\.(json|php)$/', $filtered_args[2] ) ) {
+        $output_file = $filtered_args[2];
     }
 }
 
@@ -65,6 +96,9 @@ if ( ! $output_file ) {
     }
     $output_file .= '.json';
 }
+
+// Determine output format based on file extension
+$output_format = preg_match( '/\.php$/', $output_file ) ? 'php' : 'json';
 
 // Open CSV file
 $handle = fopen( $csv_file, 'r' );
@@ -112,33 +146,65 @@ $data = array();
 $line_number = 1;
 $single_column_mode = ! $column2;
 
-while ( ( $row = fgetcsv( $handle ) ) !== false ) {
-    $line_number++;
+if ( $single_column_mode ) {
+    // Single column mode: collect all unique values first
+    $unique_values = array();
 
-    // Skip empty rows
-    if ( empty( array_filter( $row ) ) ) {
-        continue;
-    }
+    while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+        $line_number++;
 
-    if ( $single_column_mode ) {
-        // Single column mode: use value as key (lowercased, whitespace to underscores)
-        if ( ! isset( $row[ $col1_index ] ) || empty( trim( $row[ $col1_index ] ) ) ) {
+        // Skip empty rows
+        if ( empty( array_filter( $row ) ) ) {
+            continue;
+        }
+
+        if ( ! isset( $row[ $col1_index ] ) || trim( $row[ $col1_index ] ) === '' ) {
             continue;
         }
 
         $value = trim( $row[ $col1_index ] );
-        $key = strtolower( str_replace( ' ', '_', $value ) );
 
-        // Only add if key doesn't already exist (avoid duplicates)
-        if ( ! isset( $data[ $key ] ) ) {
+        // Store unique values (use value as key to avoid duplicates)
+        if ( ! isset( $unique_values[ $value ] ) ) {
+            $unique_values[ $value ] = $value;
+        }
+    }
+
+    // Sort values alphabetically (case-insensitive)
+    uksort( $unique_values, function( $a, $b ) {
+        return strcasecmp( $a, $b );
+    } );
+
+    // Build data array with numeric or lowercase keys
+    $index = 0;
+    foreach ( $unique_values as $value ) {
+        if ( $use_numeric_value ) {
+            // Use numeric incremented values
+            $data[] = array(
+                'value' => (string) $index,
+                'label' => $value,
+            );
+            $index++;
+        } else {
+            // Use lowercase values with underscores
+            $key = strtolower( str_replace( ' ', '_', $value ) );
             $data[] = array(
                 'value' => $key,
                 'label' => $value,
             );
         }
-    } else {
+    }
+} else {
+    // Multi-column mode
+    while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+        $line_number++;
+
+        // Skip empty rows
+        if ( empty( array_filter( $row ) ) ) {
+            continue;
+        }
         // Multi-column mode: array of objects with label/value/description
-        if ( ! isset( $row[ $col1_index ] ) || ! isset( $row[ $col2_index ] ) || empty( trim( $row[ $col1_index ] ) ) || empty( trim( $row[ $col2_index ] ) ) ) {
+        if ( ! isset( $row[ $col1_index ] ) || ! isset( $row[ $col2_index ] ) || trim( $row[ $col1_index ] ) === '' || trim( $row[ $col2_index ] ) === '' ) {
             continue;
         }
 
@@ -153,8 +219,8 @@ while ( ( $row = fgetcsv( $handle ) ) !== false ) {
             $item['description'] = isset( $row[ $col3_index ] ) ? trim( $row[ $col3_index ] ) : '';
         }
 
-        // Only add non-empty items
-        if ( ! empty( $item['label'] ) || ! empty( $item['value'] ) ) {
+        // Only add non-empty items (check for empty string, not falsy values)
+        if ( $item['label'] !== '' || $item['value'] !== '' ) {
             $data[] = $item;
         }
     }
@@ -162,16 +228,23 @@ while ( ( $row = fgetcsv( $handle ) ) !== false ) {
 
 fclose( $handle );
 
-// Convert to JSON
-$json = json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
-
-if ( $json === false ) {
-    echo 'Error: Failed to encode JSON' . "\n";
-    exit( 1 );
+// Generate output based on format
+if ( $output_format === 'php' ) {
+    // Generate PHP array code
+    $output = "<?php\n";
+    $output .= "// Auto-generated file - do not edit manually\n";
+    $output .= 'return ' . format_php_array( $data ) . ";\n";
+} else {
+    // Convert to JSON
+    $output = json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
+    if ( $output === false ) {
+        echo 'Error: Failed to encode JSON' . "\n";
+        exit( 1 );
+    }
 }
 
 // Write to file
-$result = file_put_contents( $output_file, $json );
+$result = file_put_contents( $output_file, $output );
 
 if ( $result === false ) {
     echo 'Error: Could not write to output file: ' . esc_html( $output_file ) . "\n";

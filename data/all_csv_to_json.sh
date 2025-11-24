@@ -19,3 +19,8 @@ php csv-to-json.php RegnSub regnsub.json
 php csv-to-json.php EngStat engstat.json
 
 php csv-to-json.php ROL Lang rol.json
+php csv-to-json.php SPI SPIspi spi.json
+php csv-to-json.php LPI LPIname LPIdesc lpi.json
+php csv-to-json.php LangFamily langfamily.json
+php csv-to-json.php LangClass langclass.json --use-numeric-value
+php csv-to-json.php LvlBible lblbible.json --use-numeric-value
