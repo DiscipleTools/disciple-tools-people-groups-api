@@ -1,0 +1,102 @@
+[
+    {
+        "value": "andean",
+        "label": "Andean"
+    },
+    {
+        "value": "brazil",
+        "label": "Brazil"
+    },
+    {
+        "value": "central_africa",
+        "label": "Central Africa"
+    },
+    {
+        "value": "central_america",
+        "label": "Central America"
+    },
+    {
+        "value": "central_asia",
+        "label": "Central Asia"
+    },
+    {
+        "value": "central_europe",
+        "label": "Central Europe"
+    },
+    {
+        "value": "east_africa",
+        "label": "East Africa"
+    },
+    {
+        "value": "east_europe",
+        "label": "East Europe"
+    },
+    {
+        "value": "islands_of_east_africa",
+        "label": "Islands of East Africa"
+    },
+    {
+        "value": "mexico_&_latin_america",
+        "label": "Mexico & Latin America"
+    },
+    {
+        "value": "middle_east",
+        "label": "Middle East"
+    },
+    {
+        "value": "n\/a",
+        "label": "N\/A"
+    },
+    {
+        "value": "non-spanish_caribbean",
+        "label": "Non-Spanish Caribbean"
+    },
+    {
+        "value": "north_asia",
+        "label": "North Asia"
+    },
+    {
+        "value": "north_east_asia",
+        "label": "North East Asia"
+    },
+    {
+        "value": "north_europe",
+        "label": "North Europe"
+    },
+    {
+        "value": "oceania",
+        "label": "Oceania"
+    },
+    {
+        "value": "south_asia",
+        "label": "South Asia"
+    },
+    {
+        "value": "south_cone",
+        "label": "South Cone"
+    },
+    {
+        "value": "south_east_asia",
+        "label": "South East Asia"
+    },
+    {
+        "value": "south_europe",
+        "label": "South Europe"
+    },
+    {
+        "value": "southern_africa",
+        "label": "Southern Africa"
+    },
+    {
+        "value": "the_balkans",
+        "label": "The Balkans"
+    },
+    {
+        "value": "west_africa",
+        "label": "West Africa"
+    },
+    {
+        "value": "west_europe",
+        "label": "West Europe"
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "value": "africa",
+        "label": "Africa"
+    },
+    {
+        "value": "asia",
+        "label": "Asia"
+    },
+    {
+        "value": "europe",
+        "label": "Europe"
+    },
+    {
+        "value": "latin_america_&_caribbean",
+        "label": "Latin America & Caribbean"
+    },
+    {
+        "value": "middle_east",
+        "label": "Middle East"
+    },
+    {
+        "value": "n\/a",
+        "label": "N\/A"
+    },
+    {
+        "value": "north_america_&_non-spanish_caribbean",
+        "label": "North America & Non-Spanish Caribbean"
+    },
+    {
+        "value": "oceania",
+        "label": "Oceania"
+    }
+]

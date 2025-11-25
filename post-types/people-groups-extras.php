@@ -10,10 +10,67 @@ class Disciple_Tools_People_Groups_Extras {
     }
 
     public function dt_custom_fields_settings( $fields, $post_type = '' ) {
-        $debug = false;
+        $debug = true;
         if ( $post_type === $this->post_type ) {
+            $fields['doxa_masteruid'] = [
+                'name' => __( 'Doxa Master UID', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The Doxa Master UID for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'doxa',
+                'show_in_table' => 35,
+            ];
+            $wagf_region_default = $this->get_default_values( 'wagf_region', sort_fn: function( $a, $b ) {
+                return strcmp( $a['label'], $b['label'] );
+            } );
+            $fields['doxa_wagf_region'] = [
+                'name' => __( 'WAGF - Region', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The WAGF region for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $wagf_region_default,
+                'post_type' => $this->post_type,
+                'tile' => 'doxa',
+                'show_in_table' => 35,
+            ];
+            $wagf_block_default = $this->get_default_values( 'wagf_block', sort_fn: function( $a, $b ) {
+                return strcmp( $a['label'], $b['label'] );
+            } );
+            $fields['doxa_wagf_block'] = [
+                'name' => __( 'WAGF - Block', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The WAGF block for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $wagf_block_default,
+                'post_type' => $this->post_type,
+                'tile' => 'doxa',
+                'show_in_table' => 35,
+            ];
+            $fields['doxa_wagf_member'] = [
+                'name' => __( 'WAGF - Member of WAGF', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Is the wagf region a member', 'disciple-tools-people-groups-api' ),
+                'type' => 'boolean',
+                'post_type' => $this->post_type,
+                'tile' => 'doxa',
+                'show_in_table' => 35,
+            ];
+            $fields['doxa_wagf_uid'] = [
+                'name' => __( 'WAGF - UID', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The WAGF UID for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'doxa',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_uid'] = [
+                'name' => __( 'IMB - UID', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The IMB UID for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
             $fields['imb_pgid'] = [
-                'name' => __( 'IMB - People Group ID', 'disciple-tools-people-groups-api' ),
+                'name' => __( 'IMB - People Group ID (PGID)', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The IMB People Groups.org ID for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'text',
                 'post_type' => $this->post_type,
@@ -28,46 +85,30 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
-            $regn_default = $this->get_default_values( 'regn', sort_fn: function( $a, $b ) {
-                return strcmp( $a['label'], $b['label'] );
-            } );
-            $fields['imb_regn'] = [
-                'name' => __( 'IMB - Region', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The region for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'key_select',
-                'default' => $regn_default,
+            $fields['imb_people_name'] = [
+                'name' => __( 'IMB - People Name', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The name for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
-            $regnsub_default = $this->get_default_values( 'regnsub', sort_fn: function( $a, $b ) {
-                return strcmp( $a['label'], $b['label'] );
-            } );
-            $fields['imb_regnsub'] = [
-                'name' => __( 'IMB - Sub Region', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The subregion for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'key_select',
-                'default' => $regnsub_default,
+            $fields['imb_display_name'] = [
+                'name' => __( 'IMB - Display Name', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The display name for the people group for using in the UI', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
-            $rog_default = $this->get_default_values( 'rog', include_value: true, sort_fn: function( $a, $b ) {
-                return strcmp( $a['label'], $b['label'] );
-            } );
-            $fields['imb_rog'] = [
-                'name' => __( 'IMB - Country', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The country for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'key_select',
-                'default' => $rog_default,
+            $fields['imb_alternate_name'] = [
+                'name' => __( 'IMB - Alternate Name', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The alternate name for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
             $isoalpha3_default = $this->get_default_values( 'isoalpha3', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
@@ -80,11 +121,35 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
+            $regn_default = $this->get_default_values( 'regn', sort_fn: function( $a, $b ) {
+                return strcmp( $a['label'], $b['label'] );
+            } );
+            $fields['imb_region'] = [
+                'name' => __( 'IMB - Region', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The region for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $regn_default,
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
 
+            $regnsub_default = $this->get_default_values( 'regnsub', sort_fn: function( $a, $b ) {
+                return strcmp( $a['label'], $b['label'] );
+            } );
+            $fields['imb_subregion'] = [
+                'name' => __( 'IMB - Sub Region', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The subregion for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $regnsub_default,
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
             $affcd_default = $this->get_default_values( 'affcd', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
-            $fields['imb_affcd'] = [
+            $fields['imb_affinity_code'] = [
                 'name' => __( 'IMB - Affinity Code', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The affinity code for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -93,40 +158,23 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
-            $fields['imb_name'] = [
-                'name' => __( 'IMB - People Name', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The name for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'text',
-                'post_type' => $this->post_type,
-                'tile' => 'people_groups',
-                'show_in_table' => 35,
-            ];
-            $fields['imb_name_display'] = [
-                'name' => __( 'IMB - Display Name', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The display name for the people group for using in the UI', 'disciple-tools-people-groups-api' ),
-                'type' => 'text',
-                'post_type' => $this->post_type,
-                'tile' => 'people_groups',
-                'show_in_table' => 35,
-            ];
-            $fields['imb_name_alt'] = [
-                'name' => __( 'IMB - Alternate Name', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The alternate name for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'text',
-                'post_type' => $this->post_type,
-                'tile' => 'people_groups',
-                'show_in_table' => 35,
-            ];
-            $fields['imb_location_desc'] = [
+            $fields['imb_people_description'] = [
                 'name' => __( 'IMB - Location Description', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The location description of where the people live', 'disciple-tools-people-groups-api' ),
-                'type' => 'text',
+                'type' => 'textarea',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_pop'] = [
+            $fields['imb_location_description'] = [
+                'name' => __( 'IMB - Location Description', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The location description of where the people live', 'disciple-tools-people-groups-api' ),
+                'type' => 'textarea',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_population'] = [
                 'name' => __( 'IMB - Population', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The population for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'number',
@@ -134,7 +182,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_pop_cls'] = [
+            $fields['imb_population_class'] = [
                 'name' => __( 'IMB - Population Class', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The population class for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -177,7 +225,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_evngpct'] = [
+            $fields['imb_evangelical_percentage'] = [
                 'name' => __( 'IMB - Evangelical Percentage', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The evangelical percentage for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'number',
@@ -185,7 +233,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_evnglvl'] = [
+            $fields['imb_evangelical_level'] = [
                 'name' => __( 'IMB - Evangelical Level', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The evangelical level for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -229,7 +277,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_congexst'] = [
+            $fields['imb_congregation_existing'] = [
                 'name' => __( 'IMB - Congregation Existence', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The existence of a congregation within the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -245,9 +293,9 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_plnting'] = [
-                'name' => __( 'IMB - Planting Status', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The planting status for the people group', 'disciple-tools-people-groups-api' ),
+            $fields['imb_church_planting'] = [
+                'name' => __( 'IMB - Church Planting Status', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The church planting status for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => [
                     '0' => [
@@ -264,57 +312,22 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
-            if ( !$debug ) {
-                $rol_default = $this->get_default_values( 'rol', include_value: true, sort_fn: function( $a, $b ) {
-                    return strcmp( $a['label'], $b['label'] );
-                } );
-                $fields['imb_rol'] = [
-                    'name' => __( 'IMB - Language', 'disciple-tools-people-groups-api' ),
-                    'description' => __( 'The language for the people group', 'disciple-tools-people-groups-api' ),
-                    'type' => 'key_select',
-                    'default' => $rol_default,
-                    'post_type' => $this->post_type,
-                    'tile' => 'people_groups',
-                    'show_in_table' => 35,
-                ];
-
-                $langfamily_default = $this->get_default_values( 'langfamily', include_value: true, sort_fn: function( $a, $b ) {
-                    return strcmp( $a['label'], $b['label'] );
-                } );
-                $fields['imb_langfamily'] = [
-                    'name' => __( 'IMB - Language Family', 'disciple-tools-people-groups-api' ),
-                    'description' => __( 'The language family for the people group', 'disciple-tools-people-groups-api' ),
-                    'type' => 'key_select',
-                    'default' => $langfamily_default,
-                    'post_type' => $this->post_type,
-                    'tile' => 'people_groups',
-                    'show_in_table' => 35,
-                ];
-
-                $langclass_default = $this->get_default_values( 'langclass', include_value: true, sort_fn: function( $a, $b ) {
-                    return strcmp( $a['label'], $b['label'] );
-                } );
-                $fields['imb_langclass'] = [
-                    'name' => __( 'IMB - Language Class', 'disciple-tools-people-groups-api' ),
-                    'description' => __( 'The language class for the people group', 'disciple-tools-people-groups-api' ),
-                    'type' => 'key_select',
-                    'default' => $langclass_default,
-                    'post_type' => $this->post_type,
-                    'tile' => 'people_groups',
-                    'show_in_table' => 35,
-                ];
-            }
-
-            $fields['imb_langspkrs'] = [
-                'name' => __( 'IMB - Language Speakers', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The number of language speakers for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'number',
+            $fields['imb_engagement_status'] = [
+                'name' => __( 'IMB - Engagement Status', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The engagement status for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => [
+                    'engaged' => [
+                        'label' => __( 'Engaged', 'disciple-tools-people-groups-api' ),
+                    ],
+                    'unengaged' => [
+                        'label' => __( 'Unengaged', 'disciple-tools-people-groups-api' ),
+                    ],
+                ],
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
             $gsec_default = $this->get_default_values( 'gsec', include_value: true, sort_fn: function( $a, $b ) {
                 return (int) $a['value'] - (int) $b['value'];
             } );
@@ -327,9 +340,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-
-
-            $fields['imb_spi'] = [
+            $fields['imb_strategic_priority_index'] = [
                 'name' => __( 'IMB - Strategic Priority Index', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The Strategic Priority Index for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -348,9 +359,9 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_lpi'] = [
-                'name' => __( 'IMB - L Priority Index', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The L Priority Index for the people group', 'disciple-tools-people-groups-api' ),
+            $fields['imb_language_priority_index'] = [
+                'name' => __( 'IMB - Language Priority Index', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The Language Priority Index for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => [
                     '0' => [
@@ -386,77 +397,53 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_engstat'] = [
-                'name' => __( 'IMB - Engagement Status', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The engagement status for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'key_select',
-                'default' => [
-                    'engaged' => [
-                        'label' => __( 'Engaged', 'disciple-tools-people-groups-api' ),
-                    ],
-                    'unengaged' => [
-                        'label' => __( 'Unengaged', 'disciple-tools-people-groups-api' ),
-                    ],
-                ],
-                'post_type' => $this->post_type,
-                'tile' => 'people_groups',
-                'show_in_table' => 35,
-            ];
 
-            $rop1_default = $this->get_default_values( 'rop1', include_value: true, sort_fn: function( $a, $b ) {
-                return strcmp( $a['label'], $b['label'] );
-            } );
-            $fields['rop1'] = [
-                'name' => __( 'ROP1 - Affinity Block', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The affinity block for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'key_select',
-                'default' => $rop1_default,
-                'post_type' => $this->post_type,
-                'tile' => 'people_groups',
-                'show_in_table' => 35,
-            ];
-
-            $rop2_default = $this->get_default_values( 'rop2', include_value: true, sort_fn: function( $a, $b ) {
-                return strcmp( $a['label'], $b['label'] );
-            } );
-            $fields['rop2'] = [
-                'name' => __( 'ROP2 - People Cluster', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The people cluster for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'key_select',
-                'default' => $rop2_default,
-                'post_type' => $this->post_type,
-                'tile' => 'people_groups',
-                'show_in_table' => 35,
-            ];
 
             if ( !$debug ) {
-                $rop25_default = $this->get_default_values( 'rop25', include_value: true, sort_fn: function( $a, $b ) {
+                $rol_default = $this->get_default_values( 'rol', include_value: true, sort_fn: function( $a, $b ) {
                     return strcmp( $a['label'], $b['label'] );
                 } );
-                $fields['rop25'] = [
-                    'name' => __( 'ROP25 - Ethne', 'disciple-tools-people-groups-api' ),
-                    'description' => __( 'The ethne of the people group', 'disciple-tools-people-groups-api' ),
+                $fields['imb_reg_of_language'] = [
+                    'name' => __( 'IMB - Registration of Language', 'disciple-tools-people-groups-api' ),
+                    'description' => __( 'The registration of language for the people group', 'disciple-tools-people-groups-api' ),
                     'type' => 'key_select',
-                    'default' => $rop25_default,
+                    'default' => $rol_default,
+                    'post_type' => $this->post_type,
+                    'tile' => 'people_groups',
+                    'show_in_table' => 35,
+                ];
+
+                $langfamily_default = $this->get_default_values( 'langfamily', include_value: true, sort_fn: function( $a, $b ) {
+                    return strcmp( $a['label'], $b['label'] );
+                } );
+                $fields['imb_language_family'] = [
+                    'name' => __( 'IMB - Language Family', 'disciple-tools-people-groups-api' ),
+                    'description' => __( 'The language family for the people group', 'disciple-tools-people-groups-api' ),
+                    'type' => 'key_select',
+                    'default' => $langfamily_default,
+                    'post_type' => $this->post_type,
+                    'tile' => 'people_groups',
+                    'show_in_table' => 35,
+                ];
+
+                $langclass_default = $this->get_default_values( 'langclass', include_value: true, sort_fn: function( $a, $b ) {
+                    return strcmp( $a['label'], $b['label'] );
+                } );
+                $fields['imb_language_class'] = [
+                    'name' => __( 'IMB - Language Class', 'disciple-tools-people-groups-api' ),
+                    'description' => __( 'The language class for the people group', 'disciple-tools-people-groups-api' ),
+                    'type' => 'key_select',
+                    'default' => $langclass_default,
                     'post_type' => $this->post_type,
                     'tile' => 'people_groups',
                     'show_in_table' => 35,
                 ];
             }
 
-            $fields['rop3'] = [
-                'name' => __( 'ROP3 - ID', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The ROP3 ID for the people group', 'disciple-tools-people-groups-api' ),
+            $fields['imb_language_speakers'] = [
+                'name' => __( 'IMB - Language Speakers', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The number of language speakers for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'number',
-                'post_type' => $this->post_type,
-                'tile' => 'people_groups',
-                'show_in_table' => 35,
-            ];
-
-            $fields['pplnm'] = [
-                'name' => __( 'ROP3 - People Name', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The name for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'text',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
@@ -465,8 +452,8 @@ class Disciple_Tools_People_Groups_Extras {
             $ror_default = $this->get_default_values( 'ror', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
-            $fields['ror'] = [
-                'name' => __( 'ROR - Religion', 'disciple-tools-people-groups-api' ),
+            $fields['imb_reg_of_religion'] = [
+                'name' => __( 'ROR - Registry of Religion', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The religion for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => $ror_default,
@@ -477,9 +464,9 @@ class Disciple_Tools_People_Groups_Extras {
             $ror3_default = $this->get_default_values( 'ror3', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
-            $fields['ror3'] = [
-                'name' => __( 'ROR3 - Religion Base', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The religion base for the people group', 'disciple-tools-people-groups-api' ),
+            $fields['imb_reg_of_religion_3'] = [
+                'name' => __( 'IMB - Registry of Religion ROR3', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The registry of religion for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => $ror3_default,
                 'post_type' => $this->post_type,
@@ -489,9 +476,9 @@ class Disciple_Tools_People_Groups_Extras {
             $ror4_default = $this->get_default_values( 'ror4', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
-            $fields['ror4'] = [
-                'name' => __( 'ROR4 - Religion Division', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The religion division for the people group', 'disciple-tools-people-groups-api' ),
+            $fields['imb_reg_of_religion_4'] = [
+                'name' => __( 'IMB - Registry of Religion ROR4', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The registry of religion for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => $ror4_default,
                 'post_type' => $this->post_type,
@@ -499,7 +486,56 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_bible'] = [
+            $fields['imb_reg_of_people_3'] = [
+                'name' => __( 'ROP3 - ID', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The ROP3 ID for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            if ( !$debug ) {
+                $rop25_default = $this->get_default_values( 'rop25', include_value: true, sort_fn: function( $a, $b ) {
+                    return strcmp( $a['label'], $b['label'] );
+                } );
+                $fields['imb_reg_of_people_25'] = [
+                    'name' => __( 'ROP25 - Ethne', 'disciple-tools-people-groups-api' ),
+                    'description' => __( 'The ethne of the people group', 'disciple-tools-people-groups-api' ),
+                    'type' => 'key_select',
+                    'default' => $rop25_default,
+                    'post_type' => $this->post_type,
+                    'tile' => 'people_groups',
+                    'show_in_table' => 35,
+                ];
+            }
+
+            $rop2_default = $this->get_default_values( 'rop2', include_value: true, sort_fn: function( $a, $b ) {
+                return strcmp( $a['label'], $b['label'] );
+            } );
+            $fields['imb_reg_of_people_2'] = [
+                'name' => __( 'ROP2 - People Cluster', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The people cluster for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $rop2_default,
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
+            $rop1_default = $this->get_default_values( 'rop1', include_value: true, sort_fn: function( $a, $b ) {
+                return strcmp( $a['label'], $b['label'] );
+            } );
+            $fields['imb_reg_of_people_1'] = [
+                'name' => __( 'ROP1 - Affinity Block', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The affinity block for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => $rop1_default,
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+
+            $fields['imb_bible_available'] = [
                 'name' => __( 'IMB - Bible Translation Status', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The bible translation status for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -519,7 +555,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_Jesus'] = [
+            $fields['imb_jesus_film_available'] = [
                 'name' => __( 'IMB - Jesus Film Status', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The Jesus film status for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -539,7 +575,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_radio'] = [
+            $fields['imb_radio_broadcast_available'] = [
                 'name' => __( 'IMB - Radio Broadcast Status', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The radio broadcast status for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -559,7 +595,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_gospel'] = [
+            $fields['imb_gospel_recordings_available'] = [
                 'name' => __( 'IMB - Gospel Translation Status', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The gospel translation status for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -579,7 +615,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_audio'] = [
+            $fields['imb_audio_scripture_available'] = [
                 'name' => __( 'IMB - Audio Bible Status', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The audio bible status for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -599,7 +635,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_stories'] = [
+            $fields['imb_bible_stories_available'] = [
                 'name' => __( 'IMB - Bible Stories Translation Status', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The bible stories translation status for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
@@ -619,7 +655,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_restot'] = [
+            $fields['imb_total_resources_available'] = [
                 'name' => __( 'IMB - Total Resources Available', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The total resources available for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'number',
@@ -628,9 +664,9 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_bible_level'] = [
-                'name' => __( 'IMB - Bible Level', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The bible level for the people group', 'disciple-tools-people-groups-api' ),
+            $fields['imb_bible_translation_level'] = [
+                'name' => __( 'IMB - Bible Translation Level', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The bible translation level for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => [
                     '0' => [
@@ -654,7 +690,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
 
-            $fields['imb_yrpub'] = [
+            $fields['imb_bible_year_published'] = [
                 'name' => __( 'IMB - Year of Bible Publication', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The year of bible publication for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'number',
@@ -662,15 +698,15 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_piccredit'] = [
-                'name' => __( 'IMB - Picture Credit', 'disciple-tools-people-groups-api' ),
+            $fields['imb_picture_credit_html'] = [
+                'name' => __( 'IMB - Picture Credit HTML', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The picture credit for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'text',
+                'type' => 'textarea',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_picurl'] = [
+            $fields['imb_picture_url'] = [
                 'name' => __( 'IMB - Picture URL', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The picture url for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'text',
@@ -678,7 +714,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_photo'] = [
+            $fields['imb_has_photo'] = [
                 'name' => __( 'IMB - Photo URL', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The photo url for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'boolean',
@@ -688,7 +724,7 @@ class Disciple_Tools_People_Groups_Extras {
             ];
         }
 
-        $fields['imb_indigenous'] = [
+        $fields['imb_is_indigenous'] = [
             'name' => __( 'IMB - Indigenous Status', 'disciple-tools-people-groups-api' ),
             'description' => __( 'The indigenous status for the people group', 'disciple-tools-people-groups-api' ),
             'type' => 'key_select',
@@ -728,7 +764,7 @@ class Disciple_Tools_People_Groups_Extras {
             'tile' => 'people_groups',
             'show_in_table' => 35,
         ];
-        $fields['imb_peoplesearch'] = [
+        $fields['imb_people_search_text'] = [
             'name' => __( 'IMB - People Search Text', 'disciple-tools-people-groups-api' ),
             'description' => __( 'The people search text for the people group', 'disciple-tools-people-groups-api' ),
             'type' => 'text',
@@ -747,6 +783,9 @@ class Disciple_Tools_People_Groups_Extras {
             ];
             $tiles['people_groups'] = [
                 'label' => 'People Groups Data',
+            ];
+            $tiles['doxa'] = [
+                'label' => 'Doxa Data',
             ];
         }
         return $tiles;

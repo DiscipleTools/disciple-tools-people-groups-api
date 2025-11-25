@@ -44,7 +44,7 @@ if ( $argc < 2 ) {
     exit( 1 );
 }
 
-$csv_file = __DIR__ . '/unique_values.csv';
+$csv_file = __DIR__ . '/doxa_unique_values.csv';
 if ( ! file_exists( $csv_file ) ) {
     echo 'Error: unique_values.csv not found in ' . __DIR__ . "\n";
     exit( 1 );

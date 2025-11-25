@@ -24,3 +24,6 @@ php csv-to-json.php LPI LPIname LPIdesc lpi.json
 php csv-to-json.php LangFamily langfamily.json
 php csv-to-json.php LangClass langclass.json --use-numeric-value
 php csv-to-json.php LvlBible lblbible.json --use-numeric-value
+php csv-to-json.php DoxaMaster doxamaster.json
+php csv-to-json.php 'WAGF Region' wagf_region.json
+php csv-to-json.php 'WAGF BLOCK' wagf_block.json
