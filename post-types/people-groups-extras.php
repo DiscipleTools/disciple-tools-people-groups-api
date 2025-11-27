@@ -10,7 +10,7 @@ class Disciple_Tools_People_Groups_Extras {
     }
 
     public function dt_custom_fields_settings( $fields, $post_type = '' ) {
-        $debug = true;
+        $debug = false;
         if ( $post_type === $this->post_type ) {
             $fields['doxa_masteruid'] = [
                 'name' => __( 'Doxa Master UID', 'disciple-tools-people-groups-api' ),
@@ -47,7 +47,18 @@ class Disciple_Tools_People_Groups_Extras {
             $fields['doxa_wagf_member'] = [
                 'name' => __( 'WAGF - Member of WAGF', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'Is the wagf region a member', 'disciple-tools-people-groups-api' ),
-                'type' => 'boolean',
+                'type' => 'key_select',
+                'default' => [
+                    'no' => [
+                        'label' => __( 'No', 'disciple-tools-people-groups-api' ),
+                    ],
+                    'yes' => [
+                        'label' => __( 'Yes', 'disciple-tools-people-groups-api' ),
+                    ],
+                    'na' => [
+                        'label' => __( 'N/A', 'disciple-tools-people-groups-api' ),
+                    ],
+                ],
                 'post_type' => $this->post_type,
                 'tile' => 'doxa',
                 'show_in_table' => 35,
@@ -693,7 +704,7 @@ class Disciple_Tools_People_Groups_Extras {
             $fields['imb_bible_year_published'] = [
                 'name' => __( 'IMB - Year of Bible Publication', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The year of bible publication for the people group', 'disciple-tools-people-groups-api' ),
-                'type' => 'number',
+                'type' => 'text',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
@@ -758,8 +769,8 @@ class Disciple_Tools_People_Groups_Extras {
         ];
         $fields['location'] = [
             'name' => __( 'Location', 'disciple-tools-people-groups-api' ),
-            'description' => __( 'The latitude, longitude location for the people group', 'disciple-tools-people-groups-api' ),
-            'type' => 'location',
+            'description' => __( 'The location of the people group', 'disciple-tools-people-groups-api' ),
+            'type' => 'location_meta',
             'post_type' => $this->post_type,
             'tile' => 'people_groups',
             'show_in_table' => 35,

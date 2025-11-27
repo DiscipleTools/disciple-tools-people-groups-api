@@ -1162,5 +1162,57 @@
     {
         "value": "C0274",
         "label": "Bantu, Southeastern"
+    },
+    {
+        "value": "C0286",
+        "label": "Madiga"
+    },
+    {
+        "value": "C0286",
+        "label": "Madiga"
+    },
+    {
+        "value": "C0287",
+        "label": "Mala"
+    },
+    {
+        "value": "C0289",
+        "label": "Other Dalit"
+    },
+    {
+        "value": "C0296",
+        "label": "Other Forward Caste"
+    },
+    {
+        "value": "C0305",
+        "label": "Kunbi"
+    },
+    {
+        "value": "C0308",
+        "label": "Mahratta"
+    },
+    {
+        "value": "C0311",
+        "label": "OBC Hindu"
+    },
+    {
+        "value": "C0321",
+        "label": "OBC Muslim"
+    },
+    {
+        "value": "C0326",
+        "label": "Other South Asian"
+    },
+    {
+        "value": "C0330",
+        "label": "Bhil"
+    },
+    {
+        "value": "C0340",
+        "label": "Beldar"
+    },
+    {
+        "value": "C0343",
+        "label": "Other Backward Class"
     }
 ]

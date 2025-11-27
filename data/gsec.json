@@ -10,6 +10,11 @@
         "description": "this people group is greater than or equal to 10% evangelical"
     },
     {
+        "value": "0",
+        "label": "No Evangelicals, Churches or Resources",
+        "description": "there are no evangelical Christians or churches among this people group and there is no access to evangelical print, audio, visual or human resources"
+    },
+    {
         "value": "1",
         "label": "Less than 2% Evangelical, No Active CP Activity",
         "description": "this people group is less than 2% evangelical, some evangelical resources are available, but there has been no active church planting among them within the past two years"

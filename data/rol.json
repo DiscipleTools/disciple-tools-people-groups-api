@@ -20266,5 +20266,21 @@
     {
         "value": "rea",
         "label": "Rerau"
+    },
+    {
+        "value": "ajp",
+        "label": "South Levantine Arabic"
+    },
+    {
+        "value": "luv",
+        "label": "Luwati"
+    },
+    {
+        "value": "mis",
+        "label": "Uncoded language"
+    },
+    {
+        "value": "vis",
+        "label": "Vishavan"
     }
 ]
