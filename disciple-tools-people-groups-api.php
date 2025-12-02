@@ -85,6 +85,9 @@ class Disciple_Tools_People_Groups_API {
 
     private function __construct() {
         $is_rest = dt_is_rest();
+
+        require_once( 'post-types/people-groups-extras.php' );
+
         if ( $is_rest && strpos( dt_get_url_path(), 'disciple-tools-people-groups-api' ) !== false ) {
             require_once( 'rest-api/rest-api.php' ); // adds starter rest api class
         }
@@ -92,8 +95,6 @@ class Disciple_Tools_People_Groups_API {
         if ( is_admin() ) {
             require_once( 'admin/admin-menu-and-tabs.php' ); // adds starter admin page and section for plugin
         }
-
-        require_once( 'post-types/people-groups-extras.php' );
     }
 
     /**

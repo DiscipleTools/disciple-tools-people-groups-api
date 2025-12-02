@@ -415,8 +415,8 @@ class Disciple_Tools_People_Groups_Extras {
                     return strcmp( $a['label'], $b['label'] );
                 } );
                 $fields['imb_reg_of_language'] = [
-                    'name' => __( 'IMB - Registration of Language', 'disciple-tools-people-groups-api' ),
-                    'description' => __( 'The registration of language for the people group', 'disciple-tools-people-groups-api' ),
+                    'name' => __( 'IMB - Registry of Language', 'disciple-tools-people-groups-api' ),
+                    'description' => __( 'The registry of language for the people group', 'disciple-tools-people-groups-api' ),
                     'type' => 'key_select',
                     'default' => $rol_default,
                     'post_type' => $this->post_type,
@@ -763,14 +763,6 @@ class Disciple_Tools_People_Groups_Extras {
             'name' => __( 'IMB - Longitude', 'disciple-tools-people-groups-api' ),
             'description' => __( 'The longitude for the people group', 'disciple-tools-people-groups-api' ),
             'type' => 'number',
-            'post_type' => $this->post_type,
-            'tile' => 'people_groups',
-            'show_in_table' => 35,
-        ];
-        $fields['location'] = [
-            'name' => __( 'Location', 'disciple-tools-people-groups-api' ),
-            'description' => __( 'The location of the people group', 'disciple-tools-people-groups-api' ),
-            'type' => 'location_meta',
             'post_type' => $this->post_type,
             'tile' => 'people_groups',
             'show_in_table' => 35,
