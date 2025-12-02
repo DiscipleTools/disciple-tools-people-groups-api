@@ -370,9 +370,9 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $fields['imb_language_priority_index'] = [
-                'name' => __( 'IMB - Language Priority Index', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The Language Priority Index for the people group', 'disciple-tools-people-groups-api' ),
+            $fields['imb_lostness_priority_index'] = [
+                'name' => __( 'IMB - Lostness Priority Index', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The Lostness Priority Index for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => [
                     '0' => [
