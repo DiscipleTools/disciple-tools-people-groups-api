@@ -733,48 +733,48 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-        }
 
-        $fields['imb_is_indigenous'] = [
-            'name' => __( 'IMB - Indigenous Status', 'disciple-tools-people-groups-api' ),
-            'description' => __( 'The indigenous status for the people group', 'disciple-tools-people-groups-api' ),
-            'type' => 'key_select',
-            'default' => [
-                '0' => [
-                    'label' => __( 'Diaspora', 'disciple-tools-people-groups-api' ),
+            $fields['imb_is_indigenous'] = [
+                'name' => __( 'IMB - Indigenous Status', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The indigenous status for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'key_select',
+                'default' => [
+                    '0' => [
+                        'label' => __( 'Diaspora', 'disciple-tools-people-groups-api' ),
+                    ],
+                    '1' => [
+                        'label' => __( 'Indigenous', 'disciple-tools-people-groups-api' ),
+                    ],
                 ],
-                '1' => [
-                    'label' => __( 'Indigenous', 'disciple-tools-people-groups-api' ),
-                ],
-            ],
-            'post_type' => $this->post_type,
-            'tile' => 'people_groups',
-            'show_in_table' => 35,
-        ];
-        $fields['imb_lat'] = [
-            'name' => __( 'IMB - Latitude', 'disciple-tools-people-groups-api' ),
-            'description' => __( 'The latitude for the people group', 'disciple-tools-people-groups-api' ),
-            'type' => 'number',
-            'post_type' => $this->post_type,
-            'tile' => 'people_groups',
-            'show_in_table' => 35,
-        ];
-        $fields['imb_lng'] = [
-            'name' => __( 'IMB - Longitude', 'disciple-tools-people-groups-api' ),
-            'description' => __( 'The longitude for the people group', 'disciple-tools-people-groups-api' ),
-            'type' => 'number',
-            'post_type' => $this->post_type,
-            'tile' => 'people_groups',
-            'show_in_table' => 35,
-        ];
-        $fields['imb_people_search_text'] = [
-            'name' => __( 'IMB - People Search Text', 'disciple-tools-people-groups-api' ),
-            'description' => __( 'The people search text for the people group', 'disciple-tools-people-groups-api' ),
-            'type' => 'text',
-            'post_type' => $this->post_type,
-            'tile' => 'people_groups',
-            'show_in_table' => 35,
-        ];
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_lat'] = [
+                'name' => __( 'IMB - Latitude', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The latitude for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_lng'] = [
+                'name' => __( 'IMB - Longitude', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The longitude for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+            $fields['imb_people_search_text'] = [
+                'name' => __( 'IMB - People Search Text', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The people search text for the people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'text',
+                'post_type' => $this->post_type,
+                'tile' => 'people_groups',
+                'show_in_table' => 35,
+            ];
+        }
 
         return $fields;
     }
