@@ -53,6 +53,29 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'fields_to_return' => $fields_to_return,
         ];
 
+        $s = get_query_var( 's' );
+        if ( $s ) {
+            $search_and_filter_query['text'] = $s;
+            $search_and_filter_query['fields_to_search'] = [
+                'name',
+                'imb_display_name',
+                'imb_location_description',
+            ];
+        }
+        $limit = get_query_var( 'limit' );
+        if ( $limit ) {
+            $search_and_filter_query['limit'] = $limit;
+        }
+        $offset = get_query_var( 'offset' );
+        if ( $offset ) {
+            $search_and_filter_query['offset'] = $offset;
+        }
+        $sort = get_query_var( 'sort' );
+        if ( $sort ) {
+            $search_and_filter_query['sort'] = $sort;
+        }
+
+
         $people_groups = DT_Posts::list_posts( 'peoplegroups', $search_and_filter_query, false );
         return $people_groups;
     }
