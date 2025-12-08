@@ -53,7 +53,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'fields_to_return' => $fields_to_return,
         ];
 
-        $s = get_query_var( 's' );
+        $s = $request->get_param( 's' );
         if ( $s ) {
             $search_and_filter_query['text'] = $s;
             $search_and_filter_query['fields_to_search'] = [
@@ -62,15 +62,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'imb_location_description',
             ];
         }
-        $limit = get_query_var( 'limit' );
+        $limit = $request->get_param( 'limit' );
         if ( $limit ) {
             $search_and_filter_query['limit'] = $limit;
         }
-        $offset = get_query_var( 'offset' );
+        $offset = $request->get_param( 'offset' );
         if ( $offset ) {
             $search_and_filter_query['offset'] = $offset;
         }
-        $sort = get_query_var( 'sort' );
+        $sort = $request->get_param( 'sort' );
         if ( $sort ) {
             $search_and_filter_query['sort'] = $sort;
         }
