@@ -124,7 +124,7 @@ class Disciple_Tools_People_Groups_Extras {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_isoalpha3'] = [
-                'name' => __( 'IMB - ISO Alpha 3', 'disciple-tools-people-groups-api' ),
+                'name' => __( 'IMB - ISO Alpha 3 Country code', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The ISO Alpha 3 code for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => $isoalpha3_default,
@@ -170,8 +170,8 @@ class Disciple_Tools_People_Groups_Extras {
                 'show_in_table' => 35,
             ];
             $fields['imb_people_description'] = [
-                'name' => __( 'IMB - Location Description', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The location description of where the people live', 'disciple-tools-people-groups-api' ),
+                'name' => __( 'IMB - People Description', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The description of the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'textarea',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',

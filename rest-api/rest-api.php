@@ -34,22 +34,18 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
 
     public function get_people_groups( WP_REST_Request $request ) {
-        $all = $request->get_param( 'all' );
-
-        if ( $all ) {
-            $fields_to_return = [];
-        } else {
-            $fields_to_return = [
-                'jp_PeopNameAcrossCountries',
-                'jp_Ctry',
-                'jp_PeopleID3',
-                'jp_ROP3',
-                'jp_Latitude',
-                'jp_Longitude',
-                'jp_location_grid',
-                'jp_location_grid_country',
-            ];
-        }
+        $fields_to_return = [
+            'doxa_wagf_region',
+            'doxa_wagf_block',
+            'doxa_wagf_member',
+            'name',
+            'imb_display_name',
+            'imb_location_description',
+            'imb_population',
+            'imb_reg_of_religion',
+            'imb_isoalpha3',
+            'rop1',
+        ];
 
         $people_groups = DT_Posts::list_posts( 'peoplegroups', $fields_to_return, false );
         return $people_groups;
