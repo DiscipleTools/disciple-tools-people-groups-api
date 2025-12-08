@@ -44,7 +44,10 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_population',
             'imb_reg_of_religion',
             'imb_isoalpha3',
-            'rop1',
+            'imb_reg_of_people_1',
+            'imb_has_photo',
+            'imb_picture_url',
+            'imb_picture_credit_html',
         ];
         $search_and_filter_query = [
             'fields_to_return' => $fields_to_return,

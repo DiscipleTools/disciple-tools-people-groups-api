@@ -804,7 +804,7 @@ class Disciple_Tools_People_Groups_Extras {
         }
         $default = array_reduce( $default, function( $acc, $item ) use ( $include_value ) {
             $acc[$item['value']] = [
-                'label' => $include_value ? $item['label'] . ' - ' . $item['value'] : $item['label'],
+                'label' => $include_value ? $item['value'] . ': ' .$item['label'] : $item['label'],
             ];
             if ( isset( $item['description'] ) ) {
                 $acc[$item['value']]['description'] = $item['description'];
