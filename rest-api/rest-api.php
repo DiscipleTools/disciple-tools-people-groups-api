@@ -46,8 +46,11 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_isoalpha3',
             'rop1',
         ];
+        $search_and_filter_query = [
+            'fields_to_return' => $fields_to_return,
+        ];
 
-        $people_groups = DT_Posts::list_posts( 'peoplegroups', $fields_to_return, false );
+        $people_groups = DT_Posts::list_posts( 'peoplegroups', $search_and_filter_query, false );
         return $people_groups;
     }
 
