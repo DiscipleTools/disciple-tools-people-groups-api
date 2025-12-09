@@ -83,11 +83,11 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         foreach ( $people_groups['posts'] as $people_group ) {
             $strip_code = function( $label ) {
-                return str_contains( $label, ':' ) ? explode( ':', $label )[1] : $label;
+                return str_contains( $label, ':' ) ? trim( explode( ':', $label )[1] ) : $label;
             };
 
             $return[] = [
-                'id' => $people_group['id'],
+                'id' => $people_group['ID'],
                 'name' => $people_group['name'],
                 'display_name' => $people_group['imb_display_name'],
                 'wagf_region' => [
