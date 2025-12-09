@@ -98,7 +98,7 @@ class Disciple_Tools_People_Groups_Extras {
             ];
             $fields['imb_people_name'] = [
                 'name' => __( 'IMB - People Name', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The name for the people group', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'The name for the people group (relates to the ROP3 field)', 'disciple-tools-people-groups-api' ),
                 'type' => 'text',
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
