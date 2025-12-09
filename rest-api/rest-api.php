@@ -35,6 +35,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
     public function get_people_groups( WP_REST_Request $request ) {
         $fields_to_return = [
+            'id',
             'doxa_wagf_region',
             'doxa_wagf_block',
             'doxa_wagf_member',
@@ -77,7 +78,51 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
 
         $people_groups = DT_Posts::list_posts( 'peoplegroups', $search_and_filter_query, false );
-        return $people_groups;
+
+        $return = [];
+
+        foreach ( $people_groups['posts'] as $people_group ) {
+            $strip_code = function( $label ) {
+                return str_contains( $label, ':' ) ? explode( ':', $label )[1] : $label;
+            };
+
+            $return[] = [
+                'id' => $people_group['id'],
+                'name' => $people_group['name'],
+                'display_name' => $people_group['imb_display_name'],
+                'wagf_region' => [
+                    'key' => $people_group['doxa_wagf_region']['key'],
+                    'label' => $strip_code( $people_group['doxa_wagf_region']['label'] ),
+                ],
+                'wagf_block' => [
+                    'key' => $people_group['doxa_wagf_block']['key'],
+                    'label' => $strip_code( $people_group['doxa_wagf_block']['label'] ),
+                ],
+                'wagf_member' => [
+                    'key' => $people_group['doxa_wagf_member']['key'],
+                    'label' => $strip_code( $people_group['doxa_wagf_member']['label'] ),
+                ],
+                'location_description' => $people_group['imb_location_description'],
+                'country' => [
+                    'key' => $people_group['imb_isoalpha3']['key'],
+                    'label' => $strip_code( $people_group['imb_isoalpha3']['label'] ),
+                ],
+                'population' => $people_group['imb_population'],
+                'religion' => [
+                    'key' => $people_group['imb_reg_of_religion']['key'],
+                    'label' => $strip_code( $people_group['imb_reg_of_religion']['label'] ),
+                ],
+                'rop1' => [
+                    'key' => $people_group['imb_reg_of_people_1']['key'],
+                    'label' => $strip_code( $people_group['imb_reg_of_people_1']['label'] ),
+                ],
+                'has_photo' => $people_group['imb_has_photo'],
+                'picture_url' => $people_group['imb_picture_url'],
+                'picture_credit_html' => $people_group['imb_picture_credit_html'],
+            ];
+        }
+
+        return $return;
     }
 
     private static $_instance = null;
