@@ -143,6 +143,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'id',
                 'imb_display_name',
                 'imb_engagement_status',
+                'imb_gsec',
                 'imb_lat',
                 'imb_lng',
             ],
