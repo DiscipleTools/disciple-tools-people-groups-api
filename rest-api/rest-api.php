@@ -59,32 +59,12 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_picture_url',
             'imb_picture_credit_html',
         ];
-        $search_and_filter_query = [
+
+        $pagination_query = $this->get_pagination_query( $request );
+
+        $search_and_filter_query = array_merge( $pagination_query, [
             'fields_to_return' => $fields_to_return,
-        ];
-
-        $s = $request->get_param( 's' );
-        if ( $s ) {
-            $search_and_filter_query['text'] = $s;
-            $search_and_filter_query['fields_to_search'] = [
-                'name',
-                'imb_display_name',
-                'imb_location_description',
-            ];
-        }
-        $limit = $request->get_param( 'limit' );
-        if ( $limit ) {
-            $search_and_filter_query['limit'] = $limit;
-        }
-        $offset = $request->get_param( 'offset' );
-        if ( $offset ) {
-            $search_and_filter_query['offset'] = $offset;
-        }
-        $sort = $request->get_param( 'sort' );
-        if ( $sort ) {
-            $search_and_filter_query['sort'] = $sort;
-        }
-
+        ] );
 
         $people_groups = DT_Posts::list_posts( 'peoplegroups', $search_and_filter_query, false );
 
@@ -138,7 +118,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
     }
 
     public function get_people_groups_engagement( WP_REST_Request $request ) {
-        $people_groups = DT_Posts::list_posts( 'peoplegroups', [
+
+        $pagination_query = $this->get_pagination_query( $request );
+        $search_and_filter_query = array_merge( $pagination_query, [
             'fields_to_return' => [
                 'id',
                 'imb_display_name',
@@ -147,8 +129,37 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'imb_lat',
                 'imb_lng',
             ],
-        ], false );
+        ] );
+        $people_groups = DT_Posts::list_posts( 'peoplegroups', $search_and_filter_query, false );
         return $people_groups;
+    }
+
+    private function get_pagination_query( WP_REST_Request $request ) {
+        $search_and_filter_query = [];
+
+        $s = $request->get_param( 's' );
+        if ( $s ) {
+            $search_and_filter_query['text'] = $s;
+            $search_and_filter_query['fields_to_search'] = [
+                'name',
+                'imb_display_name',
+                'imb_location_description',
+            ];
+        }
+        $limit = $request->get_param( 'limit' );
+        if ( $limit ) {
+            $search_and_filter_query['limit'] = $limit;
+        }
+        $offset = $request->get_param( 'offset' );
+        if ( $offset ) {
+            $search_and_filter_query['offset'] = $offset;
+        }
+        $sort = $request->get_param( 'sort' );
+        if ( $sort ) {
+            $search_and_filter_query['sort'] = $sort;
+        }
+
+        return $search_and_filter_query;
     }
 
     private static $_instance = null;
