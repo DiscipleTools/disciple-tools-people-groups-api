@@ -22,6 +22,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
         $namespace = 'dt-public/disciple-tools-people-groups-api/v1';
 
         register_rest_route(
+            $namespace, '/detail/(?P<id>\d+)', [
+                'methods'  => 'GET',
+                'callback' => [ $this, 'get_people_group_detail' ],
+                'permission_callback' => function( WP_REST_Request $request ) {
+                    return true;
+                },
+            ]
+        );
+        register_rest_route(
             $namespace, '/list', [
                 'methods'  => 'GET',
                 'callback' => [ $this, 'get_people_groups' ],
@@ -74,9 +83,6 @@ class Disciple_Tools_People_Groups_API_Endpoints
         ];
 
         foreach ( $people_groups['posts'] as $people_group ) {
-            $strip_code = function( $label ) {
-                return str_contains( $label, ':' ) ? trim( explode( ':', $label )[1] ) : $label;
-            };
 
             $return['posts'][] = [
                 'id' => $people_group['ID'],
@@ -84,29 +90,29 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'display_name' => $people_group['imb_display_name'],
                 'wagf_region' => [
                     'key' => $people_group['doxa_wagf_region']['key'],
-                    'label' => $strip_code( $people_group['doxa_wagf_region']['label'] ),
+                    'label' => $this->strip_code( $people_group['doxa_wagf_region']['label'] ),
                 ],
                 'wagf_block' => [
                     'key' => $people_group['doxa_wagf_block']['key'],
-                    'label' => $strip_code( $people_group['doxa_wagf_block']['label'] ),
+                    'label' => $this->strip_code( $people_group['doxa_wagf_block']['label'] ),
                 ],
                 'wagf_member' => [
                     'key' => $people_group['doxa_wagf_member']['key'],
-                    'label' => $strip_code( $people_group['doxa_wagf_member']['label'] ),
+                    'label' => $this->strip_code( $people_group['doxa_wagf_member']['label'] ),
                 ],
                 'location_description' => $people_group['imb_location_description'],
                 'country' => [
                     'key' => $people_group['imb_isoalpha3']['key'],
-                    'label' => $strip_code( $people_group['imb_isoalpha3']['label'] ),
+                    'label' => $this->strip_code( $people_group['imb_isoalpha3']['label'] ),
                 ],
                 'population' => $people_group['imb_population'],
                 'religion' => [
                     'key' => $people_group['imb_reg_of_religion']['key'],
-                    'label' => $strip_code( $people_group['imb_reg_of_religion']['label'] ),
+                    'label' => $this->strip_code( $people_group['imb_reg_of_religion']['label'] ),
                 ],
                 'rop1' => [
                     'key' => $people_group['imb_reg_of_people_1']['key'],
-                    'label' => $strip_code( $people_group['imb_reg_of_people_1']['label'] ),
+                    'label' => $this->strip_code( $people_group['imb_reg_of_people_1']['label'] ),
                 ],
                 'has_photo' => $people_group['imb_has_photo'],
                 'picture_url' => $people_group['imb_picture_url'],
@@ -132,6 +138,37 @@ class Disciple_Tools_People_Groups_API_Endpoints
         ] );
         $people_groups = DT_Posts::list_posts( 'peoplegroups', $search_and_filter_query, false );
         return $people_groups;
+    }
+
+    public function get_people_group_detail( WP_REST_Request $request ) {
+        $id = $request->get_param( 'id' );
+        $people_group_post = get_post( $id, ARRAY_A );
+
+        $metadata = get_post_meta( $id );
+        $post_settings = DT_Posts::get_post_settings( 'peoplegroups' );
+        $fields = $post_settings['fields'];
+        foreach ( $fields as $field_key => $field_value ) {
+            if ( isset( $metadata[ $field_key ] ) ) {
+                if ( $field_value['type'] === 'key_select' ) {
+                    $people_group_post[ $field_key ] = [
+                        'key' => $metadata[ $field_key ][0],
+                        'label' => $this->strip_code( $field_value['default'][ $metadata[ $field_key ][0] ]['label'] ),
+                    ];
+                } else {
+                    $people_group_post[ $field_key ] = $metadata[ $field_key ][0];
+                }
+            }
+        }
+
+        if ( is_wp_error( $people_group_post ) ) {
+            return new WP_REST_Response( [ 'error' => $people_group_post->get_error_message() ], 404 );
+        }
+
+        if ( is_null( $people_group_post['ID'] ) ) {
+            return new WP_REST_Response( [ 'error' => 'People group not found' ], 404 );
+        }
+
+        return new WP_REST_Response( $people_group_post, 200 );
     }
 
     private function get_pagination_query( WP_REST_Request $request ) {
@@ -160,6 +197,10 @@ class Disciple_Tools_People_Groups_API_Endpoints
         }
 
         return $search_and_filter_query;
+    }
+
+    private function strip_code( $label ) {
+        return str_contains( $label, ':' ) ? trim( explode( ':', $label )[1] ) : $label;
     }
 
     private static $_instance = null;
