@@ -30,6 +30,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 },
             ]
         );
+        register_rest_route(
+            $namespace, '/data/engagement', [
+                'methods'  => 'GET',
+                'callback' => [ $this, 'get_people_groups_engagement' ],
+                'permission_callback' => function( WP_REST_Request $request ) {
+                    return true;
+                },
+            ]
+        );
     }
 
 
@@ -126,6 +135,19 @@ class Disciple_Tools_People_Groups_API_Endpoints
         }
 
         return $return;
+    }
+
+    public function get_people_groups_engagement( WP_REST_Request $request ) {
+        $people_groups = DT_Posts::list_posts( 'peoplegroups', [
+            'fields_to_return' => [
+                'id',
+                'imb_display_name',
+                'imb_engagement_status',
+                'imb_lat',
+                'imb_lng',
+            ],
+        ], false );
+        return $people_groups;
     }
 
     private static $_instance = null;
