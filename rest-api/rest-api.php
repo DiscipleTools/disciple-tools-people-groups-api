@@ -129,8 +129,8 @@ class Disciple_Tools_People_Groups_API_Endpoints
         $results = $wpdb->get_results( "
             SELECT
                 p.ID,
-                MAX(CASE WHEN pm.meta_key = 'imb_display_name' THEN pm.meta_value END) as display_name,
-                MAX(CASE WHEN pm.meta_key = 'imb_engagement_status' THEN pm.meta_value END) as engagement_status,
+                MAX(CASE WHEN pm.meta_key = 'imb_display_name' THEN pm.meta_value END) as name,
+                MAX(CASE WHEN pm.meta_key = 'imb_engagement_status' THEN pm.meta_value END) as status,
                 MAX(CASE WHEN pm.meta_key = 'imb_lat' THEN pm.meta_value END) as lat,
                 MAX(CASE WHEN pm.meta_key = 'imb_lng' THEN pm.meta_value END) as lng
             FROM {$wpdb->posts} p
