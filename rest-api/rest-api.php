@@ -3,21 +3,8 @@ if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
 class Disciple_Tools_People_Groups_API_Endpoints
 {
-    /**
-     * @todo Set the permissions your endpoint needs
-     * @link https://github.com/DiscipleTools/Documentation/blob/master/theme-core/capabilities.md
-     * @var string[]
-     */
     public $permissions = [ 'access_contacts', 'dt_all_access_contacts', 'view_project_metrics' ];
 
-
-    /**
-     * @todo define the name of the $namespace
-     * @todo define the name of the rest route
-     * @todo defne method (CREATABLE, READABLE)
-     * @todo apply permission strategy. '__return_true' essentially skips the permission check.
-     */
-    //See https://github.com/DiscipleTools/disciple-tools-theme/wiki/Site-to-Site-Link for outside of wordpress authentication
     public function add_api_routes() {
         $namespace = 'dt-public/disciple-tools-people-groups-api/v1';
 
@@ -43,6 +30,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
             $namespace, '/data/engagement', [
                 'methods'  => 'GET',
                 'callback' => [ $this, 'get_people_groups_engagement' ],
+                'permission_callback' => function( WP_REST_Request $request ) {
+                    return true;
+                },
+            ]
+        );
+        register_rest_route(
+            $namespace, '/data/all', [
+                'methods'  => 'GET',
+                'callback' => [ $this, 'get_all_people_groups' ],
                 'permission_callback' => function( WP_REST_Request $request ) {
                     return true;
                 },
@@ -136,6 +132,52 @@ class Disciple_Tools_People_Groups_API_Endpoints
             FROM {$wpdb->posts} p
             LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
                 AND pm.meta_key IN ('imb_display_name', 'imb_engagement_status', 'imb_lat', 'imb_lng')
+            WHERE p.post_type = 'peoplegroups'
+                AND p.post_status = 'publish'
+            GROUP BY p.ID
+        ", ARRAY_A );
+
+        return [
+            'posts' => $results,
+            'total' => count( $results ),
+        ];
+    }
+
+    public function get_all_people_groups( WP_REST_Request $request ) {
+        global $wpdb;
+
+        $results = $wpdb->get_results( "
+            SELECT
+                p.ID as id,
+                p.post_title as name,
+                MAX(CASE WHEN pm.meta_key = 'doxa_wagf_region' THEN pm.meta_value END) as doxa_wagf_region,
+                MAX(CASE WHEN pm.meta_key = 'doxa_wagf_block' THEN pm.meta_value END) as doxa_wagf_block,
+                MAX(CASE WHEN pm.meta_key = 'doxa_wagf_member' THEN pm.meta_value END) as doxa_wagf_member,
+                MAX(CASE WHEN pm.meta_key = 'imb_display_name' THEN pm.meta_value END) as imb_display_name,
+                MAX(CASE WHEN pm.meta_key = 'imb_location_description' THEN pm.meta_value END) as imb_location_description,
+                MAX(CASE WHEN pm.meta_key = 'imb_population' THEN pm.meta_value END) as imb_population,
+                MAX(CASE WHEN pm.meta_key = 'imb_reg_of_religion' THEN pm.meta_value END) as imb_reg_of_religion,
+                MAX(CASE WHEN pm.meta_key = 'imb_isoalpha3' THEN pm.meta_value END) as imb_isoalpha3,
+                MAX(CASE WHEN pm.meta_key = 'imb_reg_of_people_1' THEN pm.meta_value END) as imb_reg_of_people_1,
+                MAX(CASE WHEN pm.meta_key = 'imb_has_photo' THEN pm.meta_value END) as imb_has_photo,
+                MAX(CASE WHEN pm.meta_key = 'imb_picture_url' THEN pm.meta_value END) as imb_picture_url,
+                MAX(CASE WHEN pm.meta_key = 'imb_picture_credit_html' THEN pm.meta_value END) as imb_picture_credit_html
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+                AND pm.meta_key IN (
+                    'doxa_wagf_region',
+                    'doxa_wagf_block',
+                    'doxa_wagf_member',
+                    'imb_display_name',
+                    'imb_location_description',
+                    'imb_population',
+                    'imb_reg_of_religion',
+                    'imb_isoalpha3',
+                    'imb_reg_of_people_1',
+                    'imb_has_photo',
+                    'imb_picture_url',
+                    'imb_picture_credit_html'
+                )
             WHERE p.post_type = 'peoplegroups'
                 AND p.post_status = 'publish'
             GROUP BY p.ID
