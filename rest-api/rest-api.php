@@ -100,7 +100,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
                     'key' => $people_group['doxa_wagf_member']['key'],
                     'label' => $this->strip_code( $people_group['doxa_wagf_member']['label'] ),
                 ],
-                'location_description' => $people_group['imb_location_description'],
+                'location_description' => $people_group['imb_location_description'] ?? '',
                 'country' => [
                     'key' => $people_group['imb_isoalpha3']['key'],
                     'label' => $this->strip_code( $people_group['imb_isoalpha3']['label'] ),
@@ -124,20 +124,27 @@ class Disciple_Tools_People_Groups_API_Endpoints
     }
 
     public function get_people_groups_engagement( WP_REST_Request $request ) {
+        global $wpdb;
 
-        $pagination_query = $this->get_pagination_query( $request );
-        $search_and_filter_query = array_merge( $pagination_query, [
-            'fields_to_return' => [
-                'id',
-                'imb_display_name',
-                'imb_engagement_status',
-                'imb_gsec',
-                'imb_lat',
-                'imb_lng',
-            ],
-        ] );
-        $people_groups = DT_Posts::list_posts( 'peoplegroups', $search_and_filter_query, false );
-        return $people_groups;
+        $results = $wpdb->get_results( "
+            SELECT
+                p.ID,
+                MAX(CASE WHEN pm.meta_key = 'imb_display_name' THEN pm.meta_value END) as display_name,
+                MAX(CASE WHEN pm.meta_key = 'imb_engagement_status' THEN pm.meta_value END) as engagement_status,
+                MAX(CASE WHEN pm.meta_key = 'imb_lat' THEN pm.meta_value END) as lat,
+                MAX(CASE WHEN pm.meta_key = 'imb_lng' THEN pm.meta_value END) as lng
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+                AND pm.meta_key IN ('imb_display_name', 'imb_engagement_status', 'imb_lat', 'imb_lng')
+            WHERE p.post_type = 'peoplegroups'
+                AND p.post_status = 'publish'
+            GROUP BY p.ID
+        ", ARRAY_A );
+
+        return [
+            'posts' => $results,
+            'total' => count( $results ),
+        ];
     }
 
     public function get_people_group_detail( WP_REST_Request $request ) {
