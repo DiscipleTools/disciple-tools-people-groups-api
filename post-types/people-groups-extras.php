@@ -323,7 +323,7 @@ class Disciple_Tools_People_Groups_Extras {
             } );
             $fields['imb_gsec'] = [
                 'name' => __( 'IMB - GSEC', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'The GSEC for the people group', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Global Status of Evangelical Christianity', 'disciple-tools-people-groups-api' ),
                 'type' => 'key_select',
                 'default' => $gsec_default,
                 'post_type' => $this->post_type,

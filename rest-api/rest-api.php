@@ -143,41 +143,143 @@ class Disciple_Tools_People_Groups_API_Endpoints
         ];
     }
 
+
+    public function valid_keys(){
+        return [
+            'name',
+            'doxa_masteruid',
+            'doxa_wagf_region',
+            'doxa_wagf_block',
+            'doxa_wagf_member',
+            'doxa_wagf_uid',
+            'imb_uid',
+            'imb_pgid',
+            'imb_peid',
+            'imb_people_name',
+            'imb_display_name',
+            'imb_alternate_name',
+            'imb_isoalpha3',
+            'imb_region',
+            'imb_subregion',
+            'imb_affinity_code',
+            'imb_people_description',
+            'imb_location_description',
+            'imb_population',
+            'imb_population_class',
+            'imb_evangelical_percentage',
+            'imb_evangelical_level',
+            'imb_congregation_existing',
+            'imb_church_planting',
+            'imb_engagement_status',
+            'imb_gsec',
+            'imb_strategic_priority_index',
+            'imb_lostness_priority_index',
+            'imb_reg_of_language',
+            'imb_language_family',
+            'imb_language_class',
+            'imb_language_speakers',
+            'imb_reg_of_religion', //Registry of religion
+            'imb_reg_of_religion_3', //ROR3
+            'imb_reg_of_religion_4', //ROR4
+            'imb_reg_of_people_3', //ROP3
+            'imb_reg_of_people_25',
+            'imb_reg_of_people_2',
+            'imb_reg_of_people_1',
+            'imb_bible_available',
+            'imb_jesus_film_available',
+            'imb_radio_broadcast_available',
+            'imb_gospel_recordings_available',
+            'imb_audio_scripture_available',
+            'imb_bible_stories_available',
+            'imb_total_resources_available',
+            'imb_bible_translation_level',
+            'imb_bible_year_published',
+            'imb_picture_credit_html',
+            'imb_picture_url',
+            'imb_has_photo',
+            'imb_is_indigenous',
+            'imb_lat',
+            'imb_lng',
+            'imb_people_search_text',
+        ];
+    }
+
     public function get_all_people_groups( WP_REST_Request $request ) {
         global $wpdb;
 
+        $valid_keys = $this->valid_keys();
+        $value_to_key = array_flip( $valid_keys );
+
+        $default_fields = [
+            'name',
+            'reg_of_people_1',
+            'doxa_wagf_region',
+            'doxa_wagf_block',
+            'imb_display_name',
+            'imb_population',
+            'imb_reg_of_religion',
+            'imb_reg_of_religion_3',
+            'imb_isoalpha3',
+            'imb_has_photo',
+            'imb_picture_url',
+            'imb_picture_credit_html',
+            'imb_lat',
+            'imb_lng'
+        ];
+
+        $requested_fields = $request->get_param( 'fields' );
+        if ( $requested_fields === 'all' ) {
+            $requested_fields = array_values( $valid_keys );
+        } elseif ( $requested_fields ) {
+            $requested_fields = array_map( 'trim', explode( ',', $requested_fields ) );
+        } else {
+            $requested_fields = $default_fields;
+        }
+
+        $resolved_fields = [];
+        foreach ( $requested_fields as $field ) {
+            if ( isset( $valid_keys[ $field ] ) ) {
+                $resolved_fields[ $field ] = $valid_keys[ $field ];
+            } elseif ( isset( $value_to_key[ $field ] ) ) {
+                $resolved_fields[ $value_to_key[ $field ] ] = $field;
+            }
+        }
+
+        if ( empty( $resolved_fields ) ) {
+            return [
+                'posts' => [],
+                'total' => 0,
+                'error' => 'No valid fields requested',
+            ];
+        }
+
+        $select_parts = [ 'p.ID as dt_id' ];
+        $meta_keys = [];
+
+        foreach ( $resolved_fields as $meta_key ) {
+            if ( $meta_key === 'name' ) {
+                $select_parts[] = 'p.post_title as name';
+            } else {
+                //for using key
+                $select_parts[] = "MAX(CASE WHEN pm.meta_key = '{$meta_key}' THEN pm.meta_value END) as {$meta_key}";
+                $meta_keys[] = "'{$meta_key}'";
+            }
+        }
+
+        $select_sql = implode( ",\n                ", $select_parts );
+        $meta_keys_sql = implode( ', ', $meta_keys );
+
+        $join_clause = '';
+        if ( !empty( $meta_keys ) ) {
+            $join_clause = "LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+                AND pm.meta_key IN ( {$meta_keys_sql} )";
+        }
+
         $results = $wpdb->get_results( "
             SELECT
-                p.ID as id,
-                p.post_title as name,
-                MAX(CASE WHEN pm.meta_key = 'doxa_wagf_region' THEN pm.meta_value END) as doxa_wagf_region,
-                MAX(CASE WHEN pm.meta_key = 'doxa_wagf_block' THEN pm.meta_value END) as doxa_wagf_block,
-                MAX(CASE WHEN pm.meta_key = 'doxa_wagf_member' THEN pm.meta_value END) as doxa_wagf_member,
-                MAX(CASE WHEN pm.meta_key = 'imb_display_name' THEN pm.meta_value END) as imb_display_name,
-                MAX(CASE WHEN pm.meta_key = 'imb_location_description' THEN pm.meta_value END) as imb_location_description,
-                MAX(CASE WHEN pm.meta_key = 'imb_population' THEN pm.meta_value END) as imb_population,
-                MAX(CASE WHEN pm.meta_key = 'imb_reg_of_religion' THEN pm.meta_value END) as imb_reg_of_religion,
-                MAX(CASE WHEN pm.meta_key = 'imb_isoalpha3' THEN pm.meta_value END) as imb_isoalpha3,
-                MAX(CASE WHEN pm.meta_key = 'imb_reg_of_people_1' THEN pm.meta_value END) as imb_reg_of_people_1,
-                MAX(CASE WHEN pm.meta_key = 'imb_has_photo' THEN pm.meta_value END) as imb_has_photo,
-                MAX(CASE WHEN pm.meta_key = 'imb_picture_url' THEN pm.meta_value END) as imb_picture_url,
-                MAX(CASE WHEN pm.meta_key = 'imb_picture_credit_html' THEN pm.meta_value END) as imb_picture_credit_html
+                {$select_sql}
             FROM {$wpdb->posts} p
-            LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-                AND pm.meta_key IN (
-                    'doxa_wagf_region',
-                    'doxa_wagf_block',
-                    'doxa_wagf_member',
-                    'imb_display_name',
-                    'imb_location_description',
-                    'imb_population',
-                    'imb_reg_of_religion',
-                    'imb_isoalpha3',
-                    'imb_reg_of_people_1',
-                    'imb_has_photo',
-                    'imb_picture_url',
-                    'imb_picture_credit_html'
-                )
+            {$join_clause}
             WHERE p.post_type = 'peoplegroups'
                 AND p.post_status = 'publish'
             GROUP BY p.ID
