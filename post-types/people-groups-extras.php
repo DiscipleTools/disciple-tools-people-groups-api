@@ -724,6 +724,16 @@ class Disciple_Tools_People_Groups_Extras {
                 'post_type' => $this->post_type,
                 'tile' => 'people_groups',
             ];
+
+            $fields['adopted_by_churches'] = [
+                'name' => __( 'Adopted by Churches', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Churches that have adopted this people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'connection',
+                'post_type' => 'groups',
+                'p2p_direction' => 'from',
+                'p2p_key' => 'peoplegroups_to_groups',
+                'tile' => 'mobilization',
+            ];
         }
 
         return $fields;
