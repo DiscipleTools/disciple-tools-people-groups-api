@@ -680,6 +680,13 @@ class Disciple_Tools_People_Groups_Extras {
                 'p2p_key' => 'peoplegroups_to_groups',
                 'tile' => 'mobilization',
             ];
+
+            $fields['people_praying'] = [
+                'name' => __( 'People Praying', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Number of people praying for this people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'tile' => 'mobilization',
+            ];
         }
 
         return $fields;
