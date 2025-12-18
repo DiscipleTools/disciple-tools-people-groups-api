@@ -212,12 +212,11 @@ class Disciple_Tools_People_Groups_API_Endpoints
         $value_to_key = array_flip( $valid_keys );
 
         $default_fields = [
-            'name',
+            'imb_display_name',
             'slug',
             'reg_of_people_1',
             'doxa_wagf_region',
             'doxa_wagf_block',
-            'imb_display_name',
             'imb_population',
             'imb_reg_of_religion',
             'imb_reg_of_religion_3',
