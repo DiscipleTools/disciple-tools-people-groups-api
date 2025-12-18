@@ -687,6 +687,14 @@ class Disciple_Tools_People_Groups_Extras {
                 'type' => 'number',
                 'tile' => 'mobilization',
             ];
+
+            $fields['slug'] = [
+              'name' => 'SLUG',
+              'description' => 'Unique slug for this people group to be used in the URL.',
+              'type' => 'text',
+              'readonly' => true,
+              'tile' => 'details'
+            ];
         }
 
         return $fields;
