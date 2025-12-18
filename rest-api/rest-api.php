@@ -201,6 +201,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_lat',
             'imb_lng',
             'imb_people_search_text',
+            'slug'
         ];
     }
 
@@ -212,6 +213,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         $default_fields = [
             'name',
+            'slug',
             'reg_of_people_1',
             'doxa_wagf_region',
             'doxa_wagf_block',
@@ -224,7 +226,8 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_picture_url',
             'imb_picture_credit_html',
             'imb_lat',
-            'imb_lng'
+            'imb_lng',
+            'imb_people_description'
         ];
 
         $requested_fields = $request->get_param( 'fields' );
