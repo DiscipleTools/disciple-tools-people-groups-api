@@ -9,7 +9,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
         $namespace = 'dt-public/disciple-tools-people-groups-api/v1';
 
         register_rest_route(
-            $namespace, '/detail/(?P<id>\d+)', [
+            $namespace, '/detail/(?P<slug>[^/]+)', [
                 'methods'  => 'GET',
                 'callback' => [ $this, 'get_people_group_detail' ],
                 'permission_callback' => function( WP_REST_Request $request ) {
@@ -355,14 +355,27 @@ class Disciple_Tools_People_Groups_API_Endpoints
     }
 
     public function get_people_group_detail( WP_REST_Request $request ) {
-        $id = $request->get_param( 'id' );
-        $people_group_post = get_post( $id, ARRAY_A );
+        global $wpdb;
+        $slug = $request->get_param( 'slug' );
+        $people_group_post_id = $wpdb->get_var( $wpdb->prepare( "
+            SELECT post_id
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = 'slug'
+                AND meta_value = %s
+        ", $slug ) );
 
-        $metadata = get_post_meta( $id );
+        if ( is_null( $people_group_post_id ) ) {
+            return new WP_REST_Response( [ 'error' => 'People group not found' ], 404 );
+        }
+
+        $people_group_post = get_post( $people_group_post_id, ARRAY_A );
+
+        $metadata = get_post_meta( $people_group_post_id );
         $post_settings = DT_Posts::get_post_settings( 'peoplegroups' );
         $fields = $post_settings['fields'];
+        $valid_keys = $this->valid_keys();
         foreach ( $fields as $field_key => $field_value ) {
-            if ( isset( $metadata[ $field_key ] ) ) {
+            if ( isset( $metadata[ $field_key ], $valid_keys[ $field_key ] ) ) {
                 if ( $field_value['type'] === 'key_select' ) {
                     $people_group_post[ $field_key ] = [
                         'key' => $metadata[ $field_key ][0],
