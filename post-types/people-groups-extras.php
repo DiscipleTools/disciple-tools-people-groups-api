@@ -689,11 +689,11 @@ class Disciple_Tools_People_Groups_Extras {
             ];
 
             $fields['slug'] = [
-              'name' => 'SLUG',
-              'description' => 'Unique slug for this people group to be used in the URL.',
-              'type' => 'text',
-              'readonly' => true,
-              'tile' => 'details'
+                'name' => 'SLUG',
+                'description' => 'Unique slug for this people group to be used in the URL.',
+                'type' => 'text',
+                'readonly' => true,
+                'tile' => 'details'
             ];
         }
 
