@@ -63,6 +63,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'doxa_wagf_block',
             'doxa_wagf_member',
             'name',
+            'slug',
             'imb_display_name',
             'imb_location_description',
             'imb_population',
@@ -93,6 +94,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             $return['posts'][] = [
                 'id' => $people_group['ID'],
                 'name' => $people_group['name'],
+                'slug' => $people_group['slug'] ?? '',
                 'display_name' => $people_group['imb_display_name'],
                 'wagf_region' => [
                     'key' => $people_group['doxa_wagf_region']['key'],
