@@ -375,7 +375,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
         $fields = $post_settings['fields'];
         $valid_keys = $this->valid_keys();
         foreach ( $fields as $field_key => $field_value ) {
-            if ( isset( $metadata[ $field_key ], $valid_keys[ $field_key ] ) ) {
+            if ( isset( $metadata[ $field_key ] ) && in_array( $field_key, $valid_keys ) ) {
                 if ( $field_value['type'] === 'key_select' ) {
                     $people_group_post[ $field_key ] = [
                         'key' => $metadata[ $field_key ][0],
