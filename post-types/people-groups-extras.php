@@ -683,10 +683,17 @@ class Disciple_Tools_People_Groups_Extras {
 
             $fields['people_praying'] = [
                 'name' => __( 'People Praying', 'disciple-tools-people-groups-api' ),
-                'description' => __( 'Number of people praying for this people group', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Number of people praying for this people group, averaged over the last seven days.', 'disciple-tools-people-groups-api' ),
                 'type' => 'number',
                 'tile' => 'mobilization',
             ];
+            $fields['daily_prayer_duration'] = [
+                'name' => __( 'Duration of daily prayer time', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'duration of daily prayer time, averaged over the last seven days. ', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'tile' => 'mobilization',
+            ];
+
 
             $fields['slug'] = [
               'name' => 'SLUG',

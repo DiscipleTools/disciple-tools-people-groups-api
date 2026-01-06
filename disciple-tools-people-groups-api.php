@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-people-groups-api
  * Description: Disciple.Tools - People Groups API is intended to help developers and integrator jumpstart their extension of the Disciple.Tools system.
  * Text Domain: disciple-tools-people-groups-api
- * Version:  0.1
+ * Version:  0.2
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-people-groups-api
  * Requires at least: 4.7.0
@@ -87,9 +87,10 @@ class Disciple_Tools_People_Groups_API {
         $is_rest = dt_is_rest();
 
         require_once( 'post-types/people-groups-extras.php' );
+        require_once( 'rest-api/rest-api-sync.php' );
 
         if ( $is_rest && strpos( dt_get_url_path(), 'disciple-tools-people-groups-api' ) !== false ) {
-            require_once( 'rest-api/rest-api.php' ); // adds starter rest api class
+            require_once( 'rest-api/rest-api.php' );
         }
 
         if ( is_admin() ) {
