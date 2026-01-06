@@ -9,7 +9,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
         $namespace = 'dt-public/disciple-tools-people-groups-api/v1';
 
         register_rest_route(
-            $namespace, '/detail/(?P<id>\d+)', [
+            $namespace, '/detail/(?P<slug>[^/]+)', [
                 'methods'  => 'GET',
                 'callback' => [ $this, 'get_people_group_detail' ],
                 'permission_callback' => function( WP_REST_Request $request ) {
@@ -21,6 +21,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
             $namespace, '/list', [
                 'methods'  => 'GET',
                 'callback' => [ $this, 'get_people_groups' ],
+                'permission_callback' => function( WP_REST_Request $request ) {
+                    return true;
+                },
+            ]
+        );
+        register_rest_route(
+            $namespace, '/highlighted', [
+                'methods'  => 'GET',
+                'callback' => [ $this, 'get_highlighted_people_groups' ],
                 'permission_callback' => function( WP_REST_Request $request ) {
                     return true;
                 },
@@ -54,6 +63,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'doxa_wagf_block',
             'doxa_wagf_member',
             'name',
+            'slug',
             'imb_display_name',
             'imb_location_description',
             'imb_population',
@@ -63,6 +73,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_has_photo',
             'imb_picture_url',
             'imb_picture_credit_html',
+            'adopted_by_churches',
         ];
 
         $pagination_query = $this->get_pagination_query( $request );
@@ -83,6 +94,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             $return['posts'][] = [
                 'id' => $people_group['ID'],
                 'name' => $people_group['name'],
+                'slug' => $people_group['slug'] ?? '',
                 'display_name' => $people_group['imb_display_name'],
                 'wagf_region' => [
                     'key' => $people_group['doxa_wagf_region']['key'],
@@ -113,6 +125,55 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'has_photo' => $people_group['imb_has_photo'],
                 'picture_url' => $people_group['imb_picture_url'],
                 'picture_credit_html' => $people_group['imb_picture_credit_html'],
+                'adopted_by_churches' => count( $people_group['adopted_by_churches'] ) ?? 0,
+            ];
+        }
+
+        return $return;
+    }
+    public function get_highlighted_people_groups( WP_REST_Request $request ) {
+        $limit = $request->get_param( 'limit' );
+        if ( $limit ) {
+            $limit = intval( $limit );
+        } else {
+            $limit = 6;
+        }
+
+        $results = DT_Posts::list_posts( 'peoplegroups', [
+            'fields_to_return' => [
+                'id',
+                'slug',
+                'people_praying',
+                'doxa_wagf_region',
+                'imb_display_name',
+                'imb_picture_url',
+                'imb_picture_credit_html',
+                'imb_has_photo',
+            ],
+            'limit' => $limit,
+        ], false );
+
+        if ( is_wp_error( $results ) ) {
+            return new WP_REST_Response( [ 'error' => $results->get_error_message() ], 500 );
+        }
+
+        $return = [
+            'posts' => [],
+            'total' => $results['total'],
+        ];
+        foreach ( $results['posts'] as $people_group ) {
+            $return['posts'][] = [
+                'id' => $people_group['ID'],
+                'slug' => $people_group['slug'],
+                'display_name' => $people_group['imb_display_name'],
+                'people_praying' => $people_group['people_praying'],
+                'wagf_region' => [
+                    'key' => $people_group['doxa_wagf_region']['key'],
+                    'label' => $this->strip_code( $people_group['doxa_wagf_region']['label'] ),
+                ],
+                'picture_url' => $people_group['imb_picture_url'],
+                'picture_credit_html' => $people_group['imb_picture_credit_html'],
+                'has_photo' => $people_group['imb_has_photo'],
             ];
         }
 
@@ -294,14 +355,27 @@ class Disciple_Tools_People_Groups_API_Endpoints
     }
 
     public function get_people_group_detail( WP_REST_Request $request ) {
-        $id = $request->get_param( 'id' );
-        $people_group_post = get_post( $id, ARRAY_A );
+        global $wpdb;
+        $slug = $request->get_param( 'slug' );
+        $people_group_post_id = $wpdb->get_var( $wpdb->prepare( "
+            SELECT post_id
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = 'slug'
+                AND meta_value = %s
+        ", $slug ) );
 
-        $metadata = get_post_meta( $id );
+        if ( is_null( $people_group_post_id ) ) {
+            return new WP_REST_Response( [ 'error' => 'People group not found' ], 404 );
+        }
+
+        $people_group_post = get_post( $people_group_post_id, ARRAY_A );
+
+        $metadata = get_post_meta( $people_group_post_id );
         $post_settings = DT_Posts::get_post_settings( 'peoplegroups' );
         $fields = $post_settings['fields'];
+        $valid_keys = $this->valid_keys();
         foreach ( $fields as $field_key => $field_value ) {
-            if ( isset( $metadata[ $field_key ] ) ) {
+            if ( isset( $metadata[ $field_key ] ) && in_array( $field_key, $valid_keys ) ) {
                 if ( $field_value['type'] === 'key_select' ) {
                     $people_group_post[ $field_key ] = [
                         'key' => $metadata[ $field_key ][0],
