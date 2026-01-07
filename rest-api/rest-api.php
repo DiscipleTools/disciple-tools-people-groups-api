@@ -139,26 +139,29 @@ class Disciple_Tools_People_Groups_API_Endpoints
             $limit = 6;
         }
 
-        $wagf_regions = doxa_get_wagf_regions();
+        $wagf_regions = require_once  plugin_dir_path( __FILE__ ) . '../data/wagf_region.php';
+
         $results = [];
         foreach ( $wagf_regions as $wagf_region ) {
             global $wpdb;
             $region_result = $wpdb->get_row( $wpdb->prepare( "
                 SELECT p.ID, pm.meta_value as doxa_wagf_region
                 FROM {$wpdb->posts} p
-                LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'doxa_wagf_region' AND pm.meta_value = %s
-                LEFT JOIN {$wpdb->postmeta} pm2 ON p.ID = pm2.post_id AND pm2.meta_key = 'imb_population'
+                JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'doxa_wagf_region' AND pm.meta_value = %s
+                JOIN {$wpdb->postmeta} pm2 ON p.ID = pm2.post_id AND pm2.meta_key = 'imb_population'
+                JOIN {$wpdb->postmeta} pm3 ON p.ID = pm3.post_id AND pm3.meta_key = 'imb_has_photo' AND pm3.meta_value = 1
                 WHERE p.post_type = 'peoplegroups'
                     AND p.post_status = 'publish'
                 ORDER BY pm2.meta_value DESC
                 LIMIT 1
             ", $wagf_region['value'] ), ARRAY_A );
-            $region_result = DT_Posts::get_post( 'peoplegroups', $region_result['ID'] );
-            $results[] = $region_result;
-        }
+            $region_result = DT_Posts::get_post( 'peoplegroups', $region_result['ID'], check_permissions: false );
 
-        if ( is_wp_error( $results ) ) {
-            return new WP_REST_Response( [ 'error' => $results->get_error_message() ], 500 );
+            if ( is_wp_error( $region_result ) ) {
+                return new WP_REST_Response( [ 'error' => $region_result->get_error_message() ], 500 );
+            }
+
+            $results[] = $region_result;
         }
 
         $return = [
