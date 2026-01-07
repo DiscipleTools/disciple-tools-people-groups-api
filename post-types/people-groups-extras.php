@@ -718,6 +718,9 @@ class Disciple_Tools_People_Groups_Extras {
             $tiles['doxa'] = [
                 'label' => 'Doxa Data',
             ];
+            $tiles['mobilization'] = [
+                'label' => 'Mobilization',
+            ];
         }
         return $tiles;
     }

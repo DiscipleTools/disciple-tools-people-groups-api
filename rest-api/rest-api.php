@@ -53,6 +53,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 },
             ]
         );
+        register_rest_route(
+            $namespace, '/data/statistics', [
+                'methods'  => 'GET',
+                'callback' => [ $this, 'get_people_groups_statistics' ],
+                'permission_callback' => function( WP_REST_Request $request ) {
+                    return true;
+                },
+            ]
+        );
     }
 
 
@@ -409,6 +418,28 @@ class Disciple_Tools_People_Groups_API_Endpoints
         }
 
         return new WP_REST_Response( $people_group_post, 200 );
+    }
+
+    public function get_people_groups_statistics( WP_REST_Request $request ) {
+        global $wpdb;
+        $total_with_prayer = $wpdb->get_var( "
+            SELECT COUNT(p.ID)
+            FROM {$wpdb->posts} p
+            JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'people_praying' AND pm.meta_value != 0
+            WHERE p.post_type = 'peoplegroups'
+        " );
+
+        $total_adopted = $wpdb->get_var( "
+            SELECT COUNT(p.ID)
+            FROM {$wpdb->posts} p
+            JOIN {$wpdb->p2p} pp ON p.ID = pp.p2p_from AND pp.p2p_type = 'peoplegroups_to_groups'
+            WHERE p.post_type = 'peoplegroups'
+        " );
+
+        return [
+            'total_with_prayer' => $total_with_prayer,
+            'total_adopted' => $total_adopted,
+        ];
     }
 
     private function get_pagination_query( WP_REST_Request $request ) {
