@@ -139,19 +139,23 @@ class Disciple_Tools_People_Groups_API_Endpoints
             $limit = 6;
         }
 
-        $results = DT_Posts::list_posts( 'peoplegroups', [
-            'fields_to_return' => [
-                'id',
-                'slug',
-                'people_praying',
-                'doxa_wagf_region',
-                'imb_display_name',
-                'imb_picture_url',
-                'imb_picture_credit_html',
-                'imb_has_photo',
-            ],
-            'limit' => $limit,
-        ], false );
+        $wagf_regions = doxa_get_wagf_regions();
+        $results = [];
+        foreach ( $wagf_regions as $wagf_region ) {
+            global $wpdb;
+            $region_result = $wpdb->get_row( $wpdb->prepare( "
+                SELECT p.ID, pm.meta_value as doxa_wagf_region
+                FROM {$wpdb->posts} p
+                LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'doxa_wagf_region' AND pm.meta_value = %s
+                LEFT JOIN {$wpdb->postmeta} pm2 ON p.ID = pm2.post_id AND pm2.meta_key = 'imb_population'
+                WHERE p.post_type = 'peoplegroups'
+                    AND p.post_status = 'publish'
+                ORDER BY pm2.meta_value DESC
+                LIMIT 1
+            ", $wagf_region['value'] ), ARRAY_A );
+            $region_result = DT_Posts::get_post( 'peoplegroups', $region_result['ID'] );
+            $results[] = $region_result;
+        }
 
         if ( is_wp_error( $results ) ) {
             return new WP_REST_Response( [ 'error' => $results->get_error_message() ], 500 );
@@ -159,14 +163,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         $return = [
             'posts' => [],
-            'total' => $results['total'],
+            'total' => count( $results ),
         ];
-        foreach ( $results['posts'] as $people_group ) {
+        foreach ( $results as $people_group ) {
             $return['posts'][] = [
                 'id' => $people_group['ID'],
                 'slug' => $people_group['slug'],
                 'display_name' => $people_group['imb_display_name'],
                 'people_praying' => $people_group['people_praying'],
+                'population' => $people_group['imb_population'],
                 'wagf_region' => [
                     'key' => $people_group['doxa_wagf_region']['key'],
                     'label' => $this->strip_code( $people_group['doxa_wagf_region']['label'] ),
@@ -176,6 +181,11 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'has_photo' => $people_group['imb_has_photo'],
             ];
         }
+        shuffle( $return['posts'] );
+        $return['posts'] = array_slice( $return['posts'], 0, $limit );
+        usort( $return['posts'], function( $a, $b ) {
+            return $b['population'] - $a['population'];
+        } );
 
         return $return;
     }
