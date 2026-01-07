@@ -83,6 +83,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_picture_url',
             'imb_picture_credit_html',
             'adopted_by_churches',
+            'people_praying',
         ];
 
         $pagination_query = $this->get_pagination_query( $request );
@@ -135,6 +136,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'picture_url' => $people_group['imb_picture_url'],
                 'picture_credit_html' => $people_group['imb_picture_credit_html'],
                 'adopted_by_churches' => count( $people_group['adopted_by_churches'] ) ?? 0,
+                'people_praying' => $people_group['people_praying'],
             ];
         }
 
@@ -284,7 +286,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_lat',
             'imb_lng',
             'imb_people_search_text',
-            'slug'
+            'slug',
+            'people_praying',
+            'adopted_by_churches',
         ];
     }
 
@@ -390,21 +394,21 @@ class Disciple_Tools_People_Groups_API_Endpoints
             return new WP_REST_Response( [ 'error' => 'People group not found' ], 404 );
         }
 
-        $people_group_post = get_post( $people_group_post_id, ARRAY_A );
+        $people_group_post = DT_Posts::get_post( 'peoplegroups', $people_group_post_id, check_permissions: false );
 
-        $metadata = get_post_meta( $people_group_post_id );
         $post_settings = DT_Posts::get_post_settings( 'peoplegroups' );
         $fields = $post_settings['fields'];
         $valid_keys = $this->valid_keys();
+        $post = [];
         foreach ( $fields as $field_key => $field_value ) {
-            if ( isset( $metadata[ $field_key ] ) && in_array( $field_key, $valid_keys ) ) {
+            if ( isset( $people_group_post[ $field_key ] ) && in_array( $field_key, $valid_keys ) ) {
                 if ( $field_value['type'] === 'key_select' ) {
-                    $people_group_post[ $field_key ] = [
-                        'key' => $metadata[ $field_key ][0],
-                        'label' => $this->strip_code( $field_value['default'][ $metadata[ $field_key ][0] ]['label'] ),
+                    $post[ $field_key ] = [
+                        'key' => $people_group_post[ $field_key ]['key'],
+                        'label' => $this->strip_code( $field_value['default'][ $people_group_post[ $field_key ]['key'] ]['label'] ),
                     ];
                 } else {
-                    $people_group_post[ $field_key ] = $metadata[ $field_key ][0];
+                    $post[ $field_key ] = $people_group_post[ $field_key ];
                 }
             }
         }
@@ -417,7 +421,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             return new WP_REST_Response( [ 'error' => 'People group not found' ], 404 );
         }
 
-        return new WP_REST_Response( $people_group_post, 200 );
+        return new WP_REST_Response( $post, 200 );
     }
 
     public function get_people_groups_statistics( WP_REST_Request $request ) {
