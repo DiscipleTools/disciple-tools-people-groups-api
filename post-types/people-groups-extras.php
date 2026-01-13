@@ -3,22 +3,22 @@
 if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
 class Disciple_Tools_People_Groups_Extras {
-    public $post_type = 'peoplegroups';
+    public static $post_type = 'peoplegroups';
     public function __construct() {
         add_filter( 'dt_custom_fields_settings', array( $this, 'dt_custom_fields_settings' ), 10, 2 );
         add_filter( 'dt_details_additional_tiles', array( $this, 'dt_details_additional_tiles' ), 10, 2 );
     }
 
-    public function dt_custom_fields_settings( $fields, $post_type = '' ) {
+    public static function dt_custom_fields_settings( $fields, $post_type = '' ) {
         $debug = false;
-        if ( $post_type === $this->post_type ) {
+        if ( $post_type === self::$post_type ) {
             $fields['doxa_masteruid'] = [
                 'name' => __( 'Doxa Master UID', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'The Doxa Master UID for the people group', 'disciple-tools-people-groups-api' ),
                 'type' => 'text',
                 'tile' => 'doxa',
             ];
-            $wagf_region_default = $this->get_default_values( 'wagf_region', sort_fn: function( $a, $b ) {
+            $wagf_region_default = self::get_default_values( 'wagf_region', sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['doxa_wagf_region'] = [
@@ -29,7 +29,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'doxa',
                 'show_in_table' => 35,
             ];
-            $wagf_block_default = $this->get_default_values( 'wagf_block', sort_fn: function( $a, $b ) {
+            $wagf_block_default = self::get_default_values( 'wagf_block', sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['doxa_wagf_block'] = [
@@ -99,7 +99,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'type' => 'text',
                 'tile' => 'people_groups',
             ];
-            $isoalpha3_default = $this->get_default_values( 'isoalpha3', include_value: true, sort_fn: function( $a, $b ) {
+            $isoalpha3_default = self::get_default_values( 'isoalpha3', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_isoalpha3'] = [
@@ -110,7 +110,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $regn_default = $this->get_default_values( 'regn', sort_fn: function( $a, $b ) {
+            $regn_default = self::get_default_values( 'regn', sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_region'] = [
@@ -121,7 +121,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
             ];
 
-            $regnsub_default = $this->get_default_values( 'regnsub', sort_fn: function( $a, $b ) {
+            $regnsub_default = self::get_default_values( 'regnsub', sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_subregion'] = [
@@ -131,7 +131,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'default' => $regnsub_default,
                 'tile' => 'people_groups',
             ];
-            $affcd_default = $this->get_default_values( 'affcd', include_value: true, sort_fn: function( $a, $b ) {
+            $affcd_default = self::get_default_values( 'affcd', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_affinity_code'] = [
@@ -294,7 +294,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $gsec_default = $this->get_default_values( 'gsec', include_value: true, sort_fn: function( $a, $b ) {
+            $gsec_default = self::get_default_values( 'gsec', include_value: true, sort_fn: function( $a, $b ) {
                 return (int) $a['value'] - (int) $b['value'];
             } );
             $fields['imb_gsec'] = [
@@ -360,7 +360,7 @@ class Disciple_Tools_People_Groups_Extras {
 
 
             if ( !$debug ) {
-                $rol_default = $this->get_default_values( 'rol', include_value: true, sort_fn: function( $a, $b ) {
+                $rol_default = self::get_default_values( 'rol', include_value: true, sort_fn: function( $a, $b ) {
                     return strcmp( $a['label'], $b['label'] );
                 } );
                 $fields['imb_reg_of_language'] = [
@@ -371,7 +371,7 @@ class Disciple_Tools_People_Groups_Extras {
                     'tile' => 'people_groups',
                 ];
 
-                $langfamily_default = $this->get_default_values( 'langfamily', include_value: true, sort_fn: function( $a, $b ) {
+                $langfamily_default = self::get_default_values( 'langfamily', include_value: true, sort_fn: function( $a, $b ) {
                     return strcmp( $a['label'], $b['label'] );
                 } );
                 $fields['imb_language_family'] = [
@@ -382,7 +382,7 @@ class Disciple_Tools_People_Groups_Extras {
                     'tile' => 'people_groups',
                 ];
 
-                $langclass_default = $this->get_default_values( 'langclass', include_value: true, sort_fn: function( $a, $b ) {
+                $langclass_default = self::get_default_values( 'langclass', include_value: true, sort_fn: function( $a, $b ) {
                     return strcmp( $a['label'], $b['label'] );
                 } );
                 $fields['imb_language_class'] = [
@@ -401,7 +401,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
             ];
 
-            $ror_default = $this->get_default_values( 'ror', include_value: true, sort_fn: function( $a, $b ) {
+            $ror_default = self::get_default_values( 'ror', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_reg_of_religion'] = [
@@ -412,7 +412,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
                 'show_in_table' => 35,
             ];
-            $ror3_default = $this->get_default_values( 'ror3', include_value: true, sort_fn: function( $a, $b ) {
+            $ror3_default = self::get_default_values( 'ror3', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_reg_of_religion_3'] = [
@@ -422,7 +422,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'default' => $ror3_default,
                 'tile' => 'people_groups',
             ];
-            $ror4_default = $this->get_default_values( 'ror4', include_value: true, sort_fn: function( $a, $b ) {
+            $ror4_default = self::get_default_values( 'ror4', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_reg_of_religion_4'] = [
@@ -440,7 +440,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
             ];
             if ( !$debug ) {
-                $rop25_default = $this->get_default_values( 'rop25', include_value: true, sort_fn: function( $a, $b ) {
+                $rop25_default = self::get_default_values( 'rop25', include_value: true, sort_fn: function( $a, $b ) {
                     return strcmp( $a['label'], $b['label'] );
                 } );
                 $fields['imb_reg_of_people_25'] = [
@@ -452,7 +452,7 @@ class Disciple_Tools_People_Groups_Extras {
                 ];
             }
 
-            $rop2_default = $this->get_default_values( 'rop2', include_value: true, sort_fn: function( $a, $b ) {
+            $rop2_default = self::get_default_values( 'rop2', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_reg_of_people_2'] = [
@@ -463,7 +463,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'tile' => 'people_groups',
             ];
 
-            $rop1_default = $this->get_default_values( 'rop1', include_value: true, sort_fn: function( $a, $b ) {
+            $rop1_default = self::get_default_values( 'rop1', include_value: true, sort_fn: function( $a, $b ) {
                 return strcmp( $a['label'], $b['label'] );
             } );
             $fields['imb_reg_of_people_1'] = [
@@ -708,7 +708,7 @@ class Disciple_Tools_People_Groups_Extras {
     }
 
     public function dt_details_additional_tiles( $tiles, $post_type = '' ) {
-        if ( $post_type === $this->post_type ) {
+        if ( $post_type === self::$post_type ) {
             $tiles['imb'] = [
                 'label' => 'IMB: PeopleGroups.org Data',
             ];
@@ -725,7 +725,7 @@ class Disciple_Tools_People_Groups_Extras {
         return $tiles;
     }
 
-    private function get_default_values( $file, $include_value = false, $sort_fn = null ) {
+    private static function get_default_values( $file, $include_value = false, $sort_fn = null ) {
         $default = file_get_contents( plugin_dir_path( __FILE__ ) . '../data/' . $file . '.json' );
         $default = json_decode( $default, true );
         if ( $sort_fn ) {
