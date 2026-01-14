@@ -121,6 +121,15 @@ class Disciple_Tools_People_Groups_API_Endpoints
                     } else {
                         $field_data = $people_group[ $field_key ];
                     }
+                    if ( $new_field_key === 'isoalpha3' ) {
+                        $new_field_key = 'country';
+                    }
+                    if ( $new_field_key === 'reg_of_religion' ) {
+                        $new_field_key = 'religion';
+                    }
+                    if ( $new_field_key === 'reg_of_people_1' ) {
+                        $new_field_key = 'rop1';
+                    }
                     $new_people_group_data[ $new_field_key ] = $field_data;
                 }
             }
