@@ -97,44 +97,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         $resolved_fields = $this->resolve_fields( [], $default_fields );
         $people_groups = $this->get_post_list( $resolved_fields );
-
-        $field_settings = Disciple_Tools_People_Groups_Extras::dt_custom_fields_settings( [], 'peoplegroups' );
-
-        $posts = [];
-
-        foreach ( $people_groups as $people_group ) {
-            $new_people_group_data = [
-                'id' => $people_group['dt_id'],
-                'name' => $people_group['name'],
-                'display_name' => $people_group['imb_display_name'],
-            ];
-            foreach ( $field_settings as $field_key => $field_setting ) {
-                if ( isset( $people_group[ $field_key ] ) ) {
-                    $field_data = [];
-                    $new_field_key = str_replace( 'imb_', '', $field_key );
-                    $new_field_key = str_replace( 'doxa_', '', $new_field_key );
-                    if ( $field_setting['type'] === 'key_select' ) {
-                        $field_data = [
-                            'value' => $people_group[ $field_key ],
-                            'label' => $this->strip_code( $field_setting['default'][ $people_group[ $field_key ] ]['label'] ),
-                        ];
-                    } else {
-                        $field_data = $people_group[ $field_key ];
-                    }
-                    if ( $new_field_key === 'isoalpha3' ) {
-                        $new_field_key = 'country';
-                    }
-                    if ( $new_field_key === 'reg_of_religion' ) {
-                        $new_field_key = 'religion';
-                    }
-                    if ( $new_field_key === 'reg_of_people_1' ) {
-                        $new_field_key = 'rop1';
-                    }
-                    $new_people_group_data[ $new_field_key ] = $field_data;
-                }
-            }
-            $posts[] = $new_people_group_data;
-        }
+        $posts = $this->format_people_groups( $people_groups );
 
         return [
             'posts' => $posts,
@@ -232,11 +195,28 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         $wagf_regions = require_once  plugin_dir_path( __FILE__ ) . '../data/wagf_region.php';
 
+
+        $fields = [
+            'id',
+            'name',
+            'slug',
+            'doxa_wagf_region',
+            'people_praying',
+            'imb_picture_url',
+            'imb_picture_credit_html',
+            'imb_display_name',
+            'imb_population',
+            'imb_has_photo',
+        ];
+
+        $resolved_fields = $this->resolve_fields( [], $fields );
+
         $results = [];
         foreach ( $wagf_regions as $wagf_region ) {
             if ( $wagf_region['value'] === 'na' || $wagf_region['value'] === 'oceania' ) {
                 continue;
             }
+
             $region_result = $wpdb->get_row( $wpdb->prepare( "
                 SELECT p.ID, pm.meta_value as doxa_wagf_region
                 FROM {$wpdb->posts} p
@@ -248,35 +228,19 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 ORDER BY pm2.meta_value DESC
                 LIMIT 1
             ", $wagf_region['value'] ), ARRAY_A );
-            $region_result = DT_Posts::get_post( 'peoplegroups', $region_result['ID'], check_permissions: false );
 
-            if ( is_wp_error( $region_result ) ) {
-                return new WP_REST_Response( [ 'error' => $region_result->get_error_message() ], 500 );
-            }
+            $region_result = $this->get_post_list( $resolved_fields, [
+                'id = ' . $region_result['ID'],
+            ] );
 
-            $results[] = $region_result;
+            $results[] = $region_result[0];
         }
 
+        $posts = $this->format_people_groups( $results );
         $return = [
-            'posts' => [],
+            'posts' => $posts,
             'total' => count( $results ),
         ];
-        foreach ( $results as $people_group ) {
-            $return['posts'][] = [
-                'id' => $people_group['ID'],
-                'slug' => $people_group['slug'],
-                'display_name' => $people_group['imb_display_name'],
-                'people_praying' => $people_group['people_praying'],
-                'population' => $people_group['imb_population'],
-                'wagf_region' => [
-                    'key' => $people_group['doxa_wagf_region']['key'],
-                    'label' => $this->strip_code( $people_group['doxa_wagf_region']['label'] ),
-                ],
-                'picture_url' => $people_group['imb_picture_url'],
-                'picture_credit_html' => $people_group['imb_picture_credit_html'],
-                'has_photo' => $people_group['imb_has_photo'],
-            ];
-        }
 
         $return['posts'] = array_slice( $return['posts'], 0, $limit );
         usort( $return['posts'], function( $a, $b ) {
@@ -435,7 +399,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
         return $resolved_fields;
     }
 
-    public function get_post_list( $resolved_fields ) {
+    public function get_post_list( $resolved_fields, $where_clause = [] ) {
         global $wpdb;
 
         $select_parts = [ 'p.ID as dt_id' ];
@@ -460,17 +424,66 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 AND pm.meta_key IN ( {$meta_keys_sql} )";
         }
 
-        $results = $wpdb->get_results( "
+        if ( !empty( $where_clause ) ) {
+            $where_clause = 'AND ' . implode( ' AND ', $where_clause );
+        }
+
+        $sql = "
             SELECT
                 {$select_sql}
             FROM {$wpdb->posts} p
             {$join_clause}
             WHERE p.post_type = 'peoplegroups'
                 AND p.post_status = 'publish'
+                {$where_clause}
             GROUP BY p.ID
-        ", ARRAY_A );
+        ";
+
+        $results = $wpdb->get_results( $sql, ARRAY_A );
 
         return $results;
+    }
+
+    public function format_people_groups( $people_groups ) {
+        $field_settings = Disciple_Tools_People_Groups_Extras::dt_custom_fields_settings( [], 'peoplegroups' );
+
+        $posts = [];
+
+        foreach ( $people_groups as $people_group ) {
+            $new_people_group_data = [
+                'id' => $people_group['dt_id'],
+                'name' => $people_group['name'],
+                'display_name' => $people_group['imb_display_name'],
+            ];
+            foreach ( $field_settings as $field_key => $field_setting ) {
+                if ( isset( $people_group[ $field_key ] ) ) {
+                    $field_data = [];
+                    $new_field_key = str_replace( 'imb_', '', $field_key );
+                    $new_field_key = str_replace( 'doxa_', '', $new_field_key );
+                    if ( $field_setting['type'] === 'key_select' ) {
+                        $field_data = [
+                            'value' => $people_group[ $field_key ],
+                            'label' => $this->strip_code( $field_setting['default'][ $people_group[ $field_key ] ]['label'] ),
+                        ];
+                    } else {
+                        $field_data = $people_group[ $field_key ];
+                    }
+                    if ( $new_field_key === 'isoalpha3' ) {
+                        $new_field_key = 'country';
+                    }
+                    if ( $new_field_key === 'reg_of_religion' ) {
+                        $new_field_key = 'religion';
+                    }
+                    if ( $new_field_key === 'reg_of_people_1' ) {
+                        $new_field_key = 'rop1';
+                    }
+                    $new_people_group_data[ $new_field_key ] = $field_data;
+                }
+            }
+            $posts[] = $new_people_group_data;
+        }
+
+        return $posts;
     }
 
     public function get_people_group_detail( WP_REST_Request $request ) {
