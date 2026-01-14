@@ -221,6 +221,8 @@ class Disciple_Tools_People_Groups_API_Endpoints
     }
 
     public function get_highlighted_people_groups( WP_REST_Request $request ) {
+        global $wpdb;
+
         $limit = $request->get_param( 'limit' );
         if ( $limit ) {
             $limit = intval( $limit );
@@ -232,7 +234,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         $results = [];
         foreach ( $wagf_regions as $wagf_region ) {
-            global $wpdb;
+            if ( $wagf_region['value'] === 'na' || $wagf_region['value'] === 'oceania' ) {
+                continue;
+            }
             $region_result = $wpdb->get_row( $wpdb->prepare( "
                 SELECT p.ID, pm.meta_value as doxa_wagf_region
                 FROM {$wpdb->posts} p
@@ -273,7 +277,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'has_photo' => $people_group['imb_has_photo'],
             ];
         }
-        shuffle( $return['posts'] );
+
         $return['posts'] = array_slice( $return['posts'], 0, $limit );
         usort( $return['posts'], function( $a, $b ) {
             return $b['population'] - $a['population'];
