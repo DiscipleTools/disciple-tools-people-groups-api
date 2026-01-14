@@ -211,7 +211,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         $resolved_fields = $this->resolve_fields( [], $fields );
 
-        $results = [];
+        $result_ids = [];
         foreach ( $wagf_regions as $wagf_region ) {
             if ( $wagf_region['value'] === 'na' || $wagf_region['value'] === 'oceania' ) {
                 continue;
@@ -229,17 +229,17 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 LIMIT 1
             ", $wagf_region['value'] ), ARRAY_A );
 
-            $region_result = $this->get_post_list( $resolved_fields, [
-                'id = ' . $region_result['ID'],
-            ] );
-
-            $results[] = $region_result[0];
+            $result_ids[] = $region_result['ID'];
         }
 
-        $posts = $this->format_people_groups( $results );
+        $region_results = $this->get_post_list( $resolved_fields, [
+            'id IN ( ' . implode( ', ', $result_ids ) . ' )',
+        ] );
+
+        $posts = $this->format_people_groups( $region_results );
         $return = [
             'posts' => $posts,
-            'total' => count( $results ),
+            'total' => count( $result_ids ),
         ];
 
         $return['posts'] = array_slice( $return['posts'], 0, $limit );
