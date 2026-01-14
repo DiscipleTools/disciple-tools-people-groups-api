@@ -595,6 +595,11 @@ class Disciple_Tools_People_Groups_API_Endpoints
     } // End instance()
     public function __construct() {
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+
+        add_filter('rest_post_dispatch', function($result, $server, $request) {
+            $result->header('Cache-Control', 'public, max-age=3600, s-maxage=86400');
+            return $result;
+        }, 10, 3);
     }
     public function has_permission(){
         $pass = false;
