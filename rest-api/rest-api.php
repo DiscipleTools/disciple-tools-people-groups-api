@@ -33,15 +33,6 @@ class Disciple_Tools_People_Groups_API_Endpoints
             ]
         );
         register_rest_route(
-            $namespace, '/list-old', [
-                'methods'  => 'GET',
-                'callback' => [ $this, 'get_people_groups_old' ],
-                'permission_callback' => function( WP_REST_Request $request ) {
-                    return true;
-                },
-            ]
-        );
-        register_rest_route(
             $namespace, '/highlighted', [
                 'methods'  => 'GET',
                 'callback' => [ $this, 'get_highlighted_people_groups' ],
@@ -435,6 +426,8 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         if ( !empty( $where_clause ) ) {
             $where_clause = 'AND ' . implode( ' AND ', $where_clause );
+        } else {
+            $where_clause = '';
         }
 
         $sql = "
