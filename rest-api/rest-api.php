@@ -515,6 +515,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
                         'key' => $people_group_post[ $field_key ]['key'],
                         'label' => $this->strip_code( $field_value['default'][ $people_group_post[ $field_key ]['key'] ]['label'] ),
                     ];
+                    if ( $field_key === 'imb_reg_of_religion' ) {
+                        $post[ $field_key ]['description'] = $field_value['default'][ $people_group_post[ $field_key ]['key'] ]['description'];
+                    }
                 } else {
                     $post[ $field_key ] = $people_group_post[ $field_key ];
                 }
