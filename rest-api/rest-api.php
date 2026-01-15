@@ -15,6 +15,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'permission_callback' => function( WP_REST_Request $request ) {
                     return true;
                 },
+                'args' => [
+                    'cache' => 'public, max-age=3600, s-maxage=86400'
+                ],
             ]
         );
         register_rest_route(
@@ -24,6 +27,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'permission_callback' => function( WP_REST_Request $request ) {
                     return true;
                 },
+                'args' => [
+                    'cache' => 'public, max-age=3600, s-maxage=86400'
+                ],
             ]
         );
         register_rest_route(
@@ -42,6 +48,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 'permission_callback' => function( WP_REST_Request $request ) {
                     return true;
                 },
+                'args' => [
+                    'cache' => 'public, max-age=3600, s-maxage=86400'
+                ],
             ]
         );
         register_rest_route(
@@ -597,7 +606,10 @@ class Disciple_Tools_People_Groups_API_Endpoints
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
 
         add_filter('rest_post_dispatch', function($result, $server, $request) {
-            $result->header('Cache-Control', 'public, max-age=3600, s-maxage=86400');
+            $matched_handler = $result->get_matched_handler();
+            if ( isset( $matched_handler['args']['cache'] ) ) {
+                $result->header('cache-control', $matched_handler['args']['cache']);
+            }
             return $result;
         }, 10, 3);
     }
