@@ -693,7 +693,27 @@ class Disciple_Tools_People_Groups_Extras {
                 'type' => 'number',
                 'tile' => 'mobilization',
             ];
-
+            $fields['cross_cultural_workers_present'] = [
+                'name' => __( 'Cross-cultural workers present', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Are cross-cultural workers present in this people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'boolean',
+                'tile' => 'mobilization',
+                'default' => false,
+            ];
+            $fields['work_in_local_language'] = [
+                'name' => __( 'Work in local language & culture', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Are workers working in the local language and culture', 'disciple-tools-people-groups-api' ),
+                'type' => 'boolean',
+                'tile' => 'mobilization',
+                'default' => false,
+            ];
+            $fields['disciple_and_church_multiplication'] = [
+                'name' => __( 'Disciple & church multiplication', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Are disciples and churches being multiplied in this people group', 'disciple-tools-people-groups-api' ),
+                'type' => 'boolean',
+                'tile' => 'mobilization',
+                'default' => false,
+            ];
 
             $fields['slug'] = [
                 'name' => 'SLUG',

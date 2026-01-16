@@ -335,6 +335,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'slug',
             'people_praying',
             'adopted_by_churches',
+            'cross_cultural_workers_present',
+            'work_in_local_language',
+            'disciple_and_church_multiplication',
         ];
     }
 
