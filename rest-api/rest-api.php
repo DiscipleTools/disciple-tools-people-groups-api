@@ -546,6 +546,12 @@ class Disciple_Tools_People_Groups_API_Endpoints
             JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'people_praying' AND pm.meta_value != 0
             WHERE p.post_type = 'peoplegroups'
         " );
+        $total_with_full_prayer = $wpdb->get_var( "
+            SELECT COUNT(p.ID)
+            FROM {$wpdb->posts} p
+            JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'people_praying' AND pm.meta_value >= 144
+            WHERE p.post_type = 'peoplegroups'
+        " );
 
         $total_adopted = $wpdb->get_var( "
             SELECT COUNT(p.ID)
@@ -556,6 +562,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
         return [
             'total_with_prayer' => $total_with_prayer,
+            'total_with_full_prayer' => $total_with_full_prayer,
             'total_adopted' => $total_adopted,
         ];
     }
