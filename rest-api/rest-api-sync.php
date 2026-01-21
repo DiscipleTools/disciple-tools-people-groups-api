@@ -100,6 +100,8 @@ class Disciple_Tools_People_Groups_API_Sync {
 
         $people_praying_updates = [];
         $duration_updates = [];
+        $people_committed_updates = [];
+        $committed_duration_updates = [];
 
         // Build update arrays
         foreach ( $campaigns as $campaign ) {
@@ -123,6 +125,14 @@ class Disciple_Tools_People_Groups_API_Sync {
                 $duration_updates[ $id ] = absint( $campaign['daily_prayer_duration'] );
             }
 
+            if ( isset( $campaign['people_committed'] ) ) {
+                $people_committed_updates[ $id ] = absint( $campaign['people_committed'] );
+            }
+
+            if ( isset( $campaign['committed_duration'] ) ) {
+                $committed_duration_updates[ $id ] = absint( $campaign['committed_duration'] );
+            }
+
             $total_updated++;
         }
 
@@ -134,6 +144,16 @@ class Disciple_Tools_People_Groups_API_Sync {
         // Bulk update daily_prayer_duration
         if ( ! empty( $duration_updates ) ) {
             $this->bulk_update_meta( $duration_updates, 'daily_prayer_duration' );
+        }
+
+        // Bulk update people_committed
+        if ( ! empty( $people_committed_updates ) ) {
+            $this->bulk_update_meta( $people_committed_updates, 'people_committed' );
+        }
+
+        // Bulk update committed_duration
+        if ( ! empty( $committed_duration_updates ) ) {
+            $this->bulk_update_meta( $committed_duration_updates, 'committed_duration' );
         }
 
         return [

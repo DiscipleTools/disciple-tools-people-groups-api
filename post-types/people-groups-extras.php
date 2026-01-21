@@ -693,6 +693,18 @@ class Disciple_Tools_People_Groups_Extras {
                 'type' => 'number',
                 'tile' => 'mobilization',
             ];
+            $fields['people_committed'] = [
+                'name' => __( 'People Committed', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Number of people committed to praying for this people group.', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'tile' => 'mobilization',
+            ];
+            $fields['committed_duration'] = [
+                'name' => __( 'Committed Duration', 'disciple-tools-people-groups-api' ),
+                'description' => __( 'Duration of committed prayer time.', 'disciple-tools-people-groups-api' ),
+                'type' => 'number',
+                'tile' => 'mobilization',
+            ];
             $fields['cross_cultural_workers_present'] = [
                 'name' => __( 'Cross-cultural workers present', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'Are cross-cultural workers present in this people group', 'disciple-tools-people-groups-api' ),
