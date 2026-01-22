@@ -411,6 +411,8 @@ class Disciple_Tools_People_Groups_API_Endpoints
         foreach ( $resolved_fields as $meta_key ) {
             if ( $meta_key === 'name' ) {
                 $select_parts[] = 'p.post_title as name';
+            } elseif ( $meta_key === 'adopted_by_churches' ) {
+                $select_parts[] = 'IF( COUNT(pp.p2p_from) > 0, 1, 0) as adopted_by_churches';
             } else {
                 //for using key
                 $select_parts[] = "MAX(CASE WHEN pm.meta_key = '{$meta_key}' THEN pm.meta_value END) as {$meta_key}";
@@ -418,7 +420,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             }
         }
 
-        $select_sql = implode( ",\n                ", $select_parts );
+        $select_sql = implode( ', ', $select_parts );
         $meta_keys_sql = implode( ', ', $meta_keys );
 
         $join_clause = '';
@@ -427,14 +429,17 @@ class Disciple_Tools_People_Groups_API_Endpoints
                 AND pm.meta_key IN ( {$meta_keys_sql} )";
         }
 
+        if ( in_array( 'adopted_by_churches', $resolved_fields ) ) {
+            $join_clause .= "\n LEFT JOIN {$wpdb->p2p} pp ON p.ID = pp.p2p_from AND pp.p2p_type = 'peoplegroups_to_groups'";
+        }
+
         if ( !empty( $where_clause ) ) {
             $where_clause = 'AND ' . implode( ' AND ', $where_clause );
         } else {
             $where_clause = '';
         }
 
-        $sql = "
-            SELECT
+        $sql = " SELECT
                 {$select_sql}
             FROM {$wpdb->posts} p
             {$join_clause}
