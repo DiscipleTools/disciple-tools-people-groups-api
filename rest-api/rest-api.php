@@ -334,6 +334,7 @@ class Disciple_Tools_People_Groups_API_Endpoints
             'imb_people_search_text',
             'slug',
             'people_praying',
+            'people_committed',
             'adopted_by_churches',
             'cross_cultural_workers_present',
             'work_in_local_language',
@@ -545,6 +546,9 @@ class Disciple_Tools_People_Groups_API_Endpoints
 
     public function get_people_groups_statistics( WP_REST_Request $request ) {
         global $wpdb;
+
+        $people_needed_to_cover_24_hours = 144;
+
         $total_with_prayer = $wpdb->get_var( "
             SELECT COUNT(p.ID)
             FROM {$wpdb->posts} p
@@ -554,7 +558,19 @@ class Disciple_Tools_People_Groups_API_Endpoints
         $total_with_full_prayer = $wpdb->get_var( "
             SELECT COUNT(p.ID)
             FROM {$wpdb->posts} p
-            JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'people_praying' AND pm.meta_value >= 144
+            JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'people_praying' AND pm.meta_value >= {$people_needed_to_cover_24_hours}
+            WHERE p.post_type = 'peoplegroups'
+        " );
+        $total_with_committed_prayer = $wpdb->get_var( "
+            SELECT COUNT(p.ID)
+            FROM {$wpdb->posts} p
+            JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'people_committed' AND pm.meta_value != 0
+            WHERE p.post_type = 'peoplegroups'
+        " );
+        $total_with_fully_committed_prayer = $wpdb->get_var( "
+            SELECT COUNT(p.ID)
+            FROM {$wpdb->posts} p
+            JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'people_committed' AND pm.meta_value >= {$people_needed_to_cover_24_hours}
             WHERE p.post_type = 'peoplegroups'
         " );
 
@@ -568,6 +584,8 @@ class Disciple_Tools_People_Groups_API_Endpoints
         return [
             'total_with_prayer' => $total_with_prayer,
             'total_with_full_prayer' => $total_with_full_prayer,
+            'total_with_committed_prayer' => $total_with_committed_prayer,
+            'total_with_fully_committed_prayer' => $total_with_fully_committed_prayer,
             'total_adopted' => $total_adopted,
         ];
     }

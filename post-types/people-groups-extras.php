@@ -697,6 +697,7 @@ class Disciple_Tools_People_Groups_Extras {
                 'name' => __( 'People Committed', 'disciple-tools-people-groups-api' ),
                 'description' => __( 'Number of people committed to praying for this people group.', 'disciple-tools-people-groups-api' ),
                 'type' => 'number',
+                'default' => 0,
                 'tile' => 'mobilization',
             ];
             $fields['committed_duration'] = [
